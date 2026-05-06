@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
-// Controller auth (register/login/logout) yang mengeluarkan personal access token menggunakan Laravel Sanctum
+// Auth controllers (register/login/logout) that use Laravel Sanctum for API token authentication
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -24,7 +24,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Buat token akses pribadi untuk pengguna yang baru terdaftar
+        // Generate API token for the newly registered user
         $token = $user->createToken('api_token')->plainTextToken;
 
         return response()->json(
