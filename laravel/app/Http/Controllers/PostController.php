@@ -14,10 +14,9 @@ class PostController extends Controller
     public function index()
     {
         $posts = Post::join('users', 'users.id', '=', 'post.created_by')
+            ->select('posts.*', 'users.name as author')
             ->orderBy('title')
-            ->get();
-        $users = User::orderBy('name')->get();
-        $comments = Comment::orderBy('content')->get();
+            ->paginate(10);
     }
 
     public function show($id)
