@@ -18,9 +18,9 @@ class PostController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        // Use 'author' for user's name instead of 'created_by'
+        // Use 'writer' for user's name instead of 'created_by' for frontend convenience
         $posts->getCollection()->transform(function ($post) {
-            $post->author = $post->user->name ?? null;
+            $post->writer = $post->user->name ?? null;
             return $post;
         });
 
@@ -30,7 +30,7 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::with(['user:id,name', 'comments'])->withCount('comments')->findOrFail($id);
-        $post->author = $post->user->name ?? null;
+        $post->writer = $post->user->name ?? null;
 
         return response()->json($post);
     }
@@ -42,7 +42,7 @@ class PostController extends Controller
             'content' => 'required|string',
         ]);
 
-        // use authenticated user as owner to prevent spoofing
+        // Use authenticated user as the writer of the post
         $user = $request->user();
         $post = Post::create(array_merge($validated, ['created_by' => $user->id]));
 
@@ -52,7 +52,8 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $post = Post::findOrFail($id);
-        // only owner may update
+
+        // Check if the authenticated user is the writer of the post
         $user = $request->user();
         if ($post->created_by !== $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
@@ -62,7 +63,6 @@ class PostController extends Controller
             'title' => 'required|string|max:255',
             'content' => 'required|string',
         ]);
-
         $post->update($validated);
 
         return response()->json($post);
@@ -71,14 +71,13 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
-        // only owner may delete
+
         $user = request()->user();
         if ($post->created_by !== $user->id) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
-
         $post->delete();
 
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Post berhasil dihapus'], 200);
     }
 }

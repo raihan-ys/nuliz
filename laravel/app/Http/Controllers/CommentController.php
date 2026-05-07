@@ -15,7 +15,7 @@ class CommentController extends Controller
     {
         $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')
             ->join('users', 'users.id', '=', 'comments.created_by')
-            ->select('comments.*', 'users.name as author')
+            ->select('comments.*', 'users.name as writer')
             ->orderBy('content')
             ->paginate(10);
 
@@ -52,7 +52,7 @@ class CommentController extends Controller
     {
         $comment = Comment::findOrFail($id);
         $comment->delete();
-        
+
         return response()->json(['message' => 'Komentar berhasil dihapus']);
     }
 }   
