@@ -93,7 +93,7 @@ export default function PostDetailPage() {
           <header className="mb-6 flex items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold">{post.title}</h1>
-              <div className="mt-2 text-sm text-black/70">Oleh {post.author?.name ?? post.author ?? "Unknown"}</div>
+              <div className="mt-2 text-sm text-black/70">Oleh {post.writer?.name ?? post.writer ?? "Unknown"}</div>
             </div>
 
             <div className="flex items-center gap-3">
@@ -123,7 +123,7 @@ export default function PostDetailPage() {
               {(post.comments || []).length === 0 && <div className="text-black/70">Belum ada komentar.</div>}
               {(post.comments || []).map((c) => (
                 <div key={c.id} className="border border-black p-4">
-                  <div className="text-sm font-semibold">{c.author ?? "Anonim"}</div>
+                  <div className="text-sm font-semibold">{c.writer ?? "Anonim"}</div>
                   <div className="mt-2 text-sm text-black/80">{c.content}</div>
                 </div>
               ))}

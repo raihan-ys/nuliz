@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
+import Link from "next/link";
 
 export default function RegisterPage() {
     const [name, setName] = useState("");
@@ -49,11 +50,11 @@ export default function RegisterPage() {
     return (
         <div className="min-h-screen bg-white text-black font-sans flex items-center justify-center">
             <div className="w-full max-w-md p-8">
-                <header className="mb-8 flex flex-col items-center">
+                <Link className="mb-8 flex flex-col items-center" href="/">
                     <Image src="/images/appLogo.png" alt="Nuliz logo" width={72} height={72} />
                     <h1 className="mt-4 text-2xl font-bold">Daftar ke Nuliz</h1>
                     <p className="text-sm text-black/70">Mulai nulis dan bagikan kisahmu.</p>
-                </header>
+                </Link>
 
                 <form className="space-y-4" onSubmit={handleSubmit}>
                     <div>

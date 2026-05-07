@@ -114,7 +114,7 @@ export default function PostsPage() {
                         </Link>
                       </h2>
                       <div className="mt-2 text-sm text-black/70">
-                        Oleh {post.author?.name ?? post.author ?? "Unknown"} • {post.comments_count ?? 0} komentar - Dibuat pada {new Date(post.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
+                        Oleh {post.writer?.name ?? post.writer ?? "Unknown"} • {post.comments_count ?? 0} komentar - Dibuat pada {new Date(post.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
                       </div>
                       <p className="mt-4 text-black/80">{truncate(post.content, 200)}</p>
                     </div>
