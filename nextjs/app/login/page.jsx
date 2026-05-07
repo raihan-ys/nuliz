@@ -35,9 +35,8 @@ export default function LoginPage() {
   return (
     <div className="min-h-screen bg-white text-black font-sans flex items-center justify-center">
       <div className="w-full max-w-md p-8">
-        <header className="mb-8 text-center">
-          {/* Logo: small Nuliz wordmark goes here */}
-          <Image src="" alt="Nuliz logo" width={72} height={72} />
+        <header className="mb-8 flex flex-col items-center">
+          <Image src="/images/appLogo.png" alt="Nuliz logo" width={72} height={72} />
           <h1 className="mt-4 text-2xl font-bold">Masuk ke Nuliz</h1>
           <p className="text-sm text-black/70">Masukkan kredensial untuk melanjutkan.</p>
         </header>
