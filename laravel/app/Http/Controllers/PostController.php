@@ -18,7 +18,7 @@ class PostController extends Controller
             ->orderBy('created_at', 'desc')
             ->paginate(10);
 
-        // Normalize author name to `author` field for frontend convenience
+        // Use 'author' for user's name instead of 'created_by'
         $posts->getCollection()->transform(function ($post) {
             $post->author = $post->user->name ?? null;
             return $post;
@@ -30,8 +30,6 @@ class PostController extends Controller
     public function show($id)
     {
         $post = Post::with(['user:id,name', 'comments'])->withCount('comments')->findOrFail($id);
-
-        // attach author for convenience
         $post->author = $post->user->name ?? null;
 
         return response()->json($post);

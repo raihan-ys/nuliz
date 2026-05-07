@@ -6,6 +6,7 @@ import Image from "next/image";
 
 export default function CreatePostPage() {
   const router = useRouter();
+  const author = "1"; // Placeholder, replace with actual user data
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -17,16 +18,16 @@ export default function CreatePostPage() {
     setMessage(null);
 
     try {
-      const res = await fetch("/api/posts", {
+      const res = await fetch("http://localhost:8000/api/posts/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content }),
+        body: JSON.stringify({ title, content, author }),
       });
 
-      if (!res.ok) throw new Error("Gagal membuat post");
+      if (!res.ok) throw new Error("Gagal menyimpan tulisan");
 
       const data = await res.json();
-      setMessage({ type: "success", text: "Post dibuat" });
+      setMessage({ type: "success", text: "Tulisan selesai!" });
       router.push(`/posts/${data.id}`);
     } catch (err) {
       setMessage({ type: "error", text: err.message });
@@ -38,9 +39,8 @@ export default function CreatePostPage() {
   return (
     <div className="min-h-screen bg-white text-black font-sans flex items-center justify-center">
       <div className="w-full max-w-2xl p-8">
-        <header className="mb-6 text-center">
-          {/* Poster or banner for create post page goes here */}
-          <Image src="" alt="create post banner" width={120} height={80} />
+        <header className="mb-6 flex flex-col items-center">
+          <Image src="/images/createPostLogo.png" alt="create post banner" width={120} height={80} />
           <h1 className="mt-4 text-2xl font-bold">Buat Post Baru</h1>
         </header>
 
@@ -54,7 +54,7 @@ export default function CreatePostPage() {
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               className="input input-bordered w-full bg-white text-black"
-              placeholder="Judul post"
+              placeholder="Judul tulisanmu..."
             />
           </div>
 

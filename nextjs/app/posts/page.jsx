@@ -2,7 +2,6 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 
 export default function PostsPage() {
   const [posts, setPosts] = useState([]);
@@ -11,11 +10,11 @@ export default function PostsPage() {
 
   useEffect(() => {
     async function load() {
+      // Get all posts
       try {
         const res = await fetch("http://localhost:8000/api/posts");
         if (!res.ok) throw new Error("Gagal memuat post");
         const data = await res.json();
-        // Laravel paginator returns { data: [...], ... }
         setPosts(data.data ?? data);
       } catch (err) {
         setError(err.message);
@@ -57,11 +56,11 @@ export default function PostsPage() {
                     <div className="flex-1">
                       <h2 className="text-xl font-semibold">
                         <Link href={`/posts/${post.id}`} className="hover:underline">
-                          {post.title}
+                          {truncate(post.title, 200)}
                         </Link>
                       </h2>
                       <div className="mt-2 text-sm text-black/70">
-                        Oleh {post.author?.name ?? post.author ?? "Unknown"} • {post.comments_count ?? 0} komentar
+                        Oleh {post.author?.name ?? post.author ?? "Unknown"} • {post.comments_count ?? 0} komentar - Dibuat pada {post.created_at}
                       </div>
                       <p className="mt-4 text-black/80">{truncate(post.content, 200)}</p>
                     </div>

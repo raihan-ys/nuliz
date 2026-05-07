@@ -11,6 +11,10 @@ Route::post('/login', [AuthController::class, 'login']);
 
 // TESTING ONLY
 Route::get('/posts', [PostController::class, 'index']);
+Route::get('/posts/{id}', [PostController::class, 'show']);
+Route::post('/posts', [PostController::class, 'store']);
+Route::put('/posts/{id}', [PostController::class, 'update']);
+Route::delete('/posts/{id}', [PostController::class, 'destroy']);
 
 // Route that requires authentication
 Route::middleware('auth:sanctum')->group(function() {

@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
-import Image from "next/image";
 
 export default function PostDetailPage() {
-  const { id } = useParams();
+  const {id} = useParams();
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
@@ -15,7 +14,7 @@ export default function PostDetailPage() {
 
     async function load() {
       try {
-        const res = await fetch(`/api/posts/${id}`);
+        const res = await fetch(`http://localhost:8000/api/posts/${id}`);
         if (!res.ok) throw new Error("Gagal memuat post");
         const data = await res.json();
         setPost(data);
@@ -41,11 +40,6 @@ export default function PostDetailPage() {
             <h1 className="text-3xl font-bold">{post.title}</h1>
             <div className="mt-2 text-sm text-black/70">Oleh {post.author?.name ?? post.author ?? "Unknown"}</div>
           </header>
-
-          {/* Hero image for the post goes here */}
-          <div className="mb-6">
-            <Image src="" alt="post hero" width={800} height={300} />
-          </div>
 
           <section className="mb-8">
             <div className="text-black/90 whitespace-pre-wrap">{post.content}</div>
