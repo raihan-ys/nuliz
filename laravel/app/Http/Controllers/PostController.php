@@ -40,9 +40,11 @@ class PostController extends Controller
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'created_by' => 'required|exists:users,id',
         ]);
-        $post = Post::create($validated);
+
+        // use authenticated user as owner to prevent spoofing
+        $user = $request->user();
+        $post = Post::create(array_merge($validated, ['created_by' => $user->id]));
 
         return response()->json($post, 201);
     }
@@ -50,11 +52,15 @@ class PostController extends Controller
     public function update(Request $request, $id)
     {
         $post = Post::findOrFail($id);
+        // only owner may update
+        $user = $request->user();
+        if ($post->created_by !== $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
 
         $validated = $request->validate([
             'title' => 'required|string|max:255',
             'content' => 'required|string',
-            'created_by' => 'required|exists:users,id',
         ]);
 
         $post->update($validated);
@@ -65,6 +71,12 @@ class PostController extends Controller
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
+        // only owner may delete
+        $user = request()->user();
+        if ($post->created_by !== $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $post->delete();
 
         return response()->json(null, 204);

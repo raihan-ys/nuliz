@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function RegisterPage() {
@@ -10,6 +11,7 @@ export default function RegisterPage() {
     const [passwordConfirm, setPasswordConfirm] = useState("");
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
+    const router = useRouter();
 
     async function handleSubmit(e) {
         e.preventDefault();
@@ -28,12 +30,15 @@ export default function RegisterPage() {
                 }),
             });
 
-            const data = await res.json();
+            const data = await res.json().catch(() => ({}));
 
-            // ERROR: Should only returns status code instead HTML page
-            if (!res.ok) throw new Error(data.message || JSON.stringify(data));
+            // if backend returned non-ok, surface the HTTP status code
+            if (!res.ok) throw new Error(String(res.status));
 
             setMessage({ type: "success", text: `Token: ${data.access_token}` });
+            // store token for protected API calls
+            try { localStorage.setItem('token', data.access_token); } catch (e) {}
+            router.push('/posts');
         } catch (err) {
             setMessage({ type: "error", text: err.message });
         } finally {

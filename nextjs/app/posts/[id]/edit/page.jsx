@@ -19,13 +19,38 @@ export default function EditPostPage() {
     if (!id) return;
 
     async function load() {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      if (!token) {
+        router.replace('/login');
+        return;
+      }
+
       try {
-        const res = await fetch(`http://localhost:8000/api/posts/${id}`);
-        if (!res.ok) throw new Error("Gagal memuat post");
+        const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(String(res.status));
         const data = await res.json();
         setTitle(data.title || "");
         setContent(data.content || "");
         setCreatedBy(data.created_by ?? data.created_by);
+
+        // verify ownership: fetch current user and compare
+        try {
+          const ures = await fetch('http://localhost:8000/api/user', { headers: { Authorization: `Bearer ${token}` } });
+          if (!ures.ok) throw new Error(String(ures.status));
+          const udata = await ures.json();
+          const currentUserId = udata.id;
+          const ownerId = data.created_by ?? data.user?.id;
+          if (ownerId !== currentUserId) {
+            // not owner, redirect to post detail
+            router.replace(`/posts/${id}`);
+            return;
+          }
+        } catch (e) {
+          router.replace('/login');
+          return;
+        }
       } catch (err) {
         setMessage({ type: "error", text: err.message });
       } finally {
@@ -42,15 +67,15 @@ export default function EditPostPage() {
     setMessage(null);
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content, created_by: createdBy }),
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ title, content }),
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || "Gagal menyimpan post");
+        throw new Error(String(res.status));
       }
 
       const updated = await res.json();

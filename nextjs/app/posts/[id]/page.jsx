@@ -9,6 +9,7 @@ export default function PostDetailPage() {
   const [post, setPost] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentUserId, setCurrentUserId] = useState(null);
 
   // modal state for delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
@@ -21,11 +22,30 @@ export default function PostDetailPage() {
     if (!id) return;
 
     async function load() {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      if (!token) {
+        router.replace('/login');
+        return;
+      }
+
       try {
-        const res = await fetch(`http://localhost:8000/api/posts/${id}`);
-        if (!res.ok) throw new Error("Gagal memuat post");
+        const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(String(res.status));
         const data = await res.json();
         setPost(data);
+
+        // fetch current user id to determine ownership
+        try {
+          const ures = await fetch('http://localhost:8000/api/user', { headers: { Authorization: `Bearer ${token}` } });
+          if (ures.ok) {
+            const udata = await ures.json();
+            setCurrentUserId(udata.id);
+          }
+        } catch (e) {
+          // ignore
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -45,14 +65,15 @@ export default function PostDetailPage() {
     setDeleteError(null);
 
     try {
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
         method: "DELETE",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
       if (!res.ok) {
-        const err = await res.json().catch(() => ({}));
-        throw new Error(err.message || "Gagal menghapus post");
+        // surface HTTP status code for errors
+        throw new Error(String(res.status));
       }
 
       router.push("/posts");
@@ -76,15 +97,19 @@ export default function PostDetailPage() {
             </div>
 
             <div className="flex items-center gap-3">
-              <Link href={`/posts/${id}/edit`} className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white">
-                Edit
-              </Link>
-              <button
-                className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
-                onClick={() => setShowDeleteModal(true)}
-              >
-                Hapus
-              </button>
+              { (currentUserId && (post.created_by === currentUserId || post.user?.id === currentUserId)) && (
+                <>
+                  <Link href={`/posts/${id}/edit`} className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white">
+                    Edit
+                  </Link>
+                  <button
+                    className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
+                    onClick={() => setShowDeleteModal(true)}
+                  >
+                    Hapus
+                  </button>
+                </>
+              )}
             </div>
           </header>
 

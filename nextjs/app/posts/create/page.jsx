@@ -1,16 +1,39 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function CreatePostPage() {
   const router = useRouter();
-  const created_by = "1"; // Placeholder, replace with actual user data
+  const [createdBy, setCreatedBy] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
+
+  useEffect(() => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+      router.replace('/login');
+      return;
+    }
+
+    // fetch current user to get id for created_by
+    (async () => {
+      try {
+        const res = await fetch('http://localhost:8000/api/user', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        const u = await res.json();
+        setCreatedBy(u.id);
+      } catch (err) {
+        // if user can't be retrieved, force login
+        router.replace('/login');
+      }
+    })();
+  }, [router]);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -18,19 +41,20 @@ export default function CreatePostPage() {
     setMessage(null);
 
     try {
-      const res = await fetch("http://localhost:8000/api/posts/", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content, created_by }),
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      const res = await fetch('http://localhost:8000/api/posts', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ title, content, created_by: createdBy }),
       });
 
-      if (!res.ok) throw new Error("Gagal menyimpan tulisan");
+      if (!res.ok) throw new Error(String(res.status));
 
       const data = await res.json();
-      setMessage({ type: "success", text: "Tulisan selesai!" });
+      setMessage({ type: 'success', text: 'Tulisan selesai!' });
       router.push(`/posts/${data.id}`);
     } catch (err) {
-      setMessage({ type: "error", text: err.message });
+      setMessage({ type: 'error', text: err.message });
     } finally {
       setLoading(false);
     }
@@ -40,7 +64,7 @@ export default function CreatePostPage() {
     <div className="min-h-screen bg-white text-black font-sans flex items-center justify-center">
       <div className="w-full max-w-2xl p-8">
         <header className="mb-6 flex flex-col items-center">
-          <Image src="/images/writingPoster.png" alt="Writing Image" width={120} height={80} />
+          <Image src="/images/writingPoster.png" alt="create post banner" width={120} height={80} />
           <h1 className="mt-4 text-2xl font-bold">Buat Post Baru</h1>
         </header>
 
@@ -72,14 +96,14 @@ export default function CreatePostPage() {
           </div>
 
           <div className="flex items-center justify-between">
-            <button type="submit" className="btn rounded-full bg-black text-white px-6 py-2" disabled={loading}>
-              {loading ? "Menyimpan..." : "Simpan"}
+            <button type="submit" className="btn rounded-full bg-black text-white px-6 py-2 hover:bg-white hover:text-black" disabled={loading}>
+              {loading ? 'Menyimpan...' : 'Simpan'}
             </button>
           </div>
         </form>
 
         {message && (
-          <div className={`mt-6 p-3 rounded ${message.type === "error" ? "bg-red-50 text-red-800" : "bg-green-50 text-green-800"}`}>
+          <div className={`mt-6 p-3 rounded ${message.type === 'error' ? 'bg-red-50 text-red-800' : 'bg-green-50 text-green-800'}`}>
             {message.text}
           </div>
         )}

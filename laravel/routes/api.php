@@ -9,13 +9,6 @@ use App\Http\Controllers\CommentController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// TESTING ONLY
-Route::get('/posts', [PostController::class, 'index']);
-Route::get('/posts/{id}', [PostController::class, 'show']);
-Route::post('/posts', [PostController::class, 'store']);
-Route::put('/posts/{id}', [PostController::class, 'update']);
-Route::delete('/posts/{id}', [PostController::class, 'destroy']);
-
 // Route that requires authentication
 Route::middleware('auth:sanctum')->group(function() {
     // User routes
@@ -24,7 +17,6 @@ Route::middleware('auth:sanctum')->group(function() {
         return $request->user();
     });
 
-    /*
     // Post routes
     Route::prefix('posts')->group(function() {
         Route::get('/', [PostController::class, 'index']);
@@ -33,5 +25,4 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::put('/{id}', [PostController::class, 'update']);
         Route::delete('/{id}', [PostController::class, 'destroy']);
     });
-    */
 });

@@ -1,21 +1,45 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
 export default function PostsPage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [lastPage, setLastPage] = useState(1);
+  const [total, setTotal] = useState(0);
+  const router = useRouter();
 
   useEffect(() => {
-    async function load() {
-      // Get all posts
+    async function load(page = 1) {
+      // require token
+      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      if (!token) {
+        router.replace('/login');
+        return;
+      }
+
       try {
-        const res = await fetch("http://localhost:8000/api/posts");
-        if (!res.ok) throw new Error("Gagal memuat post");
+        const res = await fetch(`http://localhost:8000/api/posts?page=${page}`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(String(res.status));
         const data = await res.json();
-        setPosts(data.data ?? data);
+        const list = data.data ?? data;
+        setPosts(list);
+        // set pagination meta when using Laravel paginator
+        if (data.current_page !== undefined) {
+          setCurrentPage(data.current_page);
+          setLastPage(data.last_page);
+          setTotal(data.total);
+        } else if (data.meta) {
+          setCurrentPage(data.meta.current_page);
+          setLastPage(data.meta.last_page);
+          setTotal(data.meta.total);
+        }
       } catch (err) {
         setError(err.message);
       } finally {
@@ -23,8 +47,38 @@ export default function PostsPage() {
       }
     }
 
-    load();
-  }, []);
+    load(currentPage);
+  }, [router]);
+
+  async function goToPage(page) {
+    if (page < 1 || page > lastPage) return;
+    setLoading(true);
+    setError(null);
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+    if (!token) {
+      router.replace('/login');
+      return;
+    }
+
+    try {
+      const res = await fetch(`http://localhost:8000/api/posts?page=${page}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (!res.ok) throw new Error(String(res.status));
+      const data = await res.json();
+      const list = data.data ?? data;
+      setPosts(list);
+      if (data.current_page !== undefined) {
+        setCurrentPage(data.current_page);
+        setLastPage(data.last_page);
+        setTotal(data.total);
+      }
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   // Truncate post content if words exceed n characters
   function truncate(text, n = 200) {
@@ -37,7 +91,7 @@ export default function PostsPage() {
       <main className="mx-auto max-w-6xl px-6 py-12">
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Semua Post</h1>
-          <Link href="/posts/create" className="btn rounded-full border border-black bg-black text-white">
+          <Link href="/posts/create" className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black">
             Buat Post
           </Link>
         </div>
@@ -60,7 +114,7 @@ export default function PostsPage() {
                         </Link>
                       </h2>
                       <div className="mt-2 text-sm text-black/70">
-                        Oleh {post.author?.name ?? post.author ?? "Unknown"} • {post.comments_count ?? 0} komentar - Dibuat pada {post.created_at}
+                        Oleh {post.author?.name ?? post.author ?? "Unknown"} • {post.comments_count ?? 0} komentar - Dibuat pada {new Date(post.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
                       </div>
                       <p className="mt-4 text-black/80">{truncate(post.content, 200)}</p>
                     </div>
@@ -69,6 +123,28 @@ export default function PostsPage() {
               ))
             )}
           </div>
+          {/* Pagination controls */}
+          {lastPage > 1 && (
+            <div className="mt-8 flex items-center justify-center gap-2">
+              <button className="btn btn-sm" onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1}>
+                Prev
+              </button>
+
+              {Array.from({ length: lastPage }, (_, i) => i + 1).map((p) => (
+                <button
+                  key={p}
+                  className={`btn btn-sm ${p === currentPage ? 'bg-black text-white' : 'btn-ghost'}`}
+                  onClick={() => goToPage(p)}
+                >
+                  {p}
+                </button>
+              ))}
+
+              <button className="btn btn-sm" onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= lastPage}>
+                Next
+              </button>
+            </div>
+          )}
         </div>
       </main>
     </div>

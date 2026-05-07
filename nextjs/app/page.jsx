@@ -1,28 +1,9 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function Home() {
   return (
     <div className="min-h-screen bg-white text-black font-sans">
-      <header className="border-b border-black/10">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between p-6">
-          <div className="flex items-center gap-4">
-            <Image src="/images/appLogo.png" alt="logo Nuliz" width={70} height={70} />
-            <span className="text-lg font-semibold">Nuliz</span>
-          </div>
-          <div className="flex items-center gap-3">
-            <a className="text-sm hover:underline" href="#features">
-              Fitur
-            </a>
-            <a
-              className="p-3 btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white"
-              href="/login"
-            >
-              Mulai
-            </a>
-          </div>
-        </nav>
-      </header>
-
       <main className="mx-auto max-w-6xl px-6 py-20">
         <section className="grid grid-cols-1 gap-12 lg:grid-cols-2 items-center">
           <div>
@@ -38,16 +19,16 @@ export default function Home() {
             </p>
 
             <div className="mt-8 flex flex-wrap gap-4">
-              <a
+              <Link
                 id="get-started"
                 className="p-3 btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
-                href="/login"
+                href="/posts/create"
               >
                 Mulai Menulis
-              </a>
-              <a className="p-3 btn btn-ghost rounded-full border border-black" href="#learn-more">
-                Pelajari Lebih Lanjut
-              </a>
+              </Link>
+              <Link className="p-3 btn btn-ghost rounded-full border border-black" href="/posts">
+                Jelajahi Tulisan
+              </Link>
             </div>
           </div>
 
@@ -81,10 +62,6 @@ export default function Home() {
           </div>
         </section>
       </main>
-
-      <footer className="border-t border-black/10">
-        <div className="mx-auto max-w-6xl p-6 text-center text-black/70 font-bold">© {new Date().getFullYear()} Nuliz</div>
-      </footer>
     </div>
   );
 }
