@@ -58,8 +58,8 @@ export default function Home() {
             <Image
               src="/images/appPoster.png"
               alt="Ilustrasi menulis"
-              width={500}
-              height={400}
+              width={410}
+              height={300}
             />
           </div>
         </section>
