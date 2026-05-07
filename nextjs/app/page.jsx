@@ -6,7 +6,7 @@ export default function Home() {
       <header className="border-b border-black/10">
         <nav className="mx-auto flex max-w-6xl items-center justify-between p-6">
           <div className="flex items-center gap-4">
-            <Image src="/images/appLogo.png" alt="Nuliz logo" width={32} height={32} />
+            <Image src="/images/appLogo.png" alt="Nuliz logo" width={70} height={70} />
             <span className="text-lg font-semibold">Nuliz</span>
           </div>
           <div className="flex items-center gap-3">
@@ -17,7 +17,7 @@ export default function Home() {
               Contoh
             </a>
             <a
-              className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white"
+              className="p-2 btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white"
               href="#get-started"
             >
               Mulai
@@ -43,20 +43,24 @@ export default function Home() {
             <div className="mt-8 flex flex-wrap gap-4">
               <a
                 id="get-started"
-                className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
+                className="p-3 btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
                 href="#register"
               >
                 Mulai Menulis
               </a>
-              <a className="btn btn-ghost rounded-full border border-black text-black" href="#learn-more">
+              <a className="p-3 btn btn-ghost rounded-full border border-black text-black" href="#learn-more">
                 Pelajari Lebih Lanjut
               </a>
             </div>
           </div>
 
           <div className="flex justify-center lg:justify-end">
-            {/* Hero poster image: large visual showing writing/reading scene */}
-            <img src="" alt="Hero poster" className="w-full max-w-md" />
+            <Image
+              src="/images/appPoster.png"
+              alt="Ilustrasi menulis di Nuliz"
+              width={500}
+              height={400}
+            />
           </div>
         </section>
 
