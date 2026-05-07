@@ -6,7 +6,7 @@ export default function Home() {
       <header className="border-b border-black/10">
         <nav className="mx-auto flex max-w-6xl items-center justify-between p-6">
           <div className="flex items-center gap-4">
-            <Image src="/images/appLogo.png" alt="Nuliz logo" width={70} height={70} />
+            <Image src="/images/appLogo.png" alt="logo Nuliz" width={70} height={70} />
             <span className="text-lg font-semibold">Nuliz</span>
           </div>
           <div className="flex items-center gap-3">
@@ -36,7 +36,7 @@ export default function Home() {
             </h1>
             <p className="mt-6 max-w-xl text-lg text-black/80">
               Nuliz adalah tempat untuk menulis ide, berbagi cerita, dan terhubung
-              dengan pembaca. Interfacenya sederhana, fokus pada tulisan Anda,
+              dengan pembaca. Tampilan sederhana, fokus pada tulisanmu,
               dan siap dipakai kapan saja.
             </p>
 
@@ -57,7 +57,7 @@ export default function Home() {
           <div className="flex justify-center lg:justify-end">
             <Image
               src="/images/appPoster.png"
-              alt="Ilustrasi menulis di Nuliz"
+              alt="Ilustrasi menulis"
               width={500}
               height={400}
             />
@@ -65,7 +65,7 @@ export default function Home() {
         </section>
 
         <section id="features" className="mt-20">
-          <h2 className="text-2xl font-bold">Fitur Utama</h2>
+          <h2 className="text-2xl font-bold">Keunggulan Nuliz</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             <div className="card border border-black p-6">
               <h3 className="text-lg font-semibold">Antarmuka Minimal</h3>
@@ -74,18 +74,18 @@ export default function Home() {
 
             <div className="card border border-black p-6">
               <h3 className="text-lg font-semibold">Publikasi Mudah</h3>
-              <p className="mt-2 text-sm text-black/75">Bagikan cerita dan dapatkan pembaca.</p>
+              <p className="mt-2 text-sm text-black/75">Bagikan cerita dan dapat pembaca.</p>
             </div>
 
             <div className="card border border-black p-6">
-              <h3 className="text-lg font-semibold">Riwayat dan Draf</h3>
-              <p className="mt-2 text-sm text-black/75">Simpan draf dan lanjutkan kapan saja.</p>
+              <h3 className="text-lg font-semibold">Ubah Sesukamu</h3>
+              <p className="mt-2 text-sm text-black/75">Ubah tulisanmu kapan saja.</p>
             </div>
           </div>
         </section>
 
         <section id="posts" className="mt-20">
-          <h2 className="text-2xl font-bold">Contoh Kisah</h2>
+          <h2 className="text-2xl font-bold">Cerita Terbaru</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
             <article className="border border-black p-6">
               <h3 className="text-lg font-semibold">Judul Post Pertama</h3>
