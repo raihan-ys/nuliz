@@ -17,7 +17,7 @@ export default function Home() {
               Contoh
             </a>
             <a
-              className="p-2 btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white"
+              className="p-3 btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white"
               href="#get-started"
             >
               Mulai
@@ -44,17 +44,17 @@ export default function Home() {
               <a
                 id="get-started"
                 className="p-3 btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
-                href="#register"
+                href="/login"
               >
                 Mulai Menulis
               </a>
-              <a className="p-3 btn btn-ghost rounded-full border border-black text-black" href="#learn-more">
+              <a className="p-3 btn btn-ghost rounded-full border border-black" href="#learn-more">
                 Pelajari Lebih Lanjut
               </a>
             </div>
           </div>
 
-          <div className="flex justify-center lg:justify-end">
+          <div className="flex justify-center lg:justify-start">
             <Image
               src="/images/appPoster.png"
               alt="Ilustrasi menulis"
@@ -101,7 +101,7 @@ export default function Home() {
       </main>
 
       <footer className="border-t border-black/10">
-        <div className="mx-auto max-w-6xl p-6 text-center text-sm text-black/70">© {new Date().getFullYear()} Nuliz</div>
+        <div className="mx-auto max-w-6xl p-6 text-center text-black/70 font-bold">© {new Date().getFullYear()} Nuliz</div>
       </footer>
     </div>
   );
