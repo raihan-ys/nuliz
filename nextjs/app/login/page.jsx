@@ -28,7 +28,8 @@ export default function LoginPage() {
       if (!res.ok) throw new Error(String(res.status));
 
       setMessage({ type: "success", text: "Login berhasil!" });
-      // store token for protected API calls
+      
+      // Store token for protected API calls
       try { localStorage.setItem('token', data.access_token); } catch (e) {}
       router.push('/posts');
     } catch (err) {

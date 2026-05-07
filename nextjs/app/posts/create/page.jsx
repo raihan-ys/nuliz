@@ -19,7 +19,6 @@ export default function CreatePostPage() {
       return;
     }
 
-    // fetch current user to get id for created_by
     (async () => {
       try {
         const res = await fetch('http://localhost:8000/api/user', {

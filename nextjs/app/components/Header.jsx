@@ -31,7 +31,7 @@ export default function Header() {
         });
       }
     } catch (e) {
-      // ignore errors, we'll remove token anyway
+      // Ignore errors, just proceed to clear token and redirect
     } finally {
       try { localStorage.removeItem("token"); } catch (e) {}
       router.push("/login");

@@ -10,8 +10,6 @@ export default function PostDetailPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
-
-  // modal state for delete confirmation
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
@@ -40,7 +38,7 @@ export default function PostDetailPage() {
         const data = await res.json();
         setPost(data);
 
-        // fetch current user id to determine ownership
+        // Fetch current user id to determine ownership
         try {
           const ures = await fetch('http://localhost:8000/api/user', { headers: { Authorization: `Bearer ${token}` } });
           if (ures.ok) {
@@ -76,7 +74,6 @@ export default function PostDetailPage() {
       });
 
       if (!res.ok) {
-        // surface HTTP status code for errors
         throw new Error(String(res.status));
       }
 
@@ -142,7 +139,6 @@ export default function PostDetailPage() {
         </article>
       </main>
 
-      {/* Delete confirmation modal */}
       <div className={showDeleteModal ? "modal modal-open" : "modal"}>
         <div className="modal-box text-center bg-white text-black">
           <h3 className="font-bold text-lg">Hapus post?</h3>
@@ -186,7 +182,7 @@ export default function PostDetailPage() {
 
                 if (!cres.ok) throw new Error(String(cres.status));
 
-                // refresh post
+                // Refresh post
                 const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
                 if (!pres.ok) throw new Error(String(pres.status));
                 const pdata = await pres.json();

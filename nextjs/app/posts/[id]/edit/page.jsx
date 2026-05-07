@@ -35,7 +35,6 @@ export default function EditPostPage() {
         setContent(data.content || "");
         setCreatedBy(data.created_by ?? data.created_by);
 
-        // verify ownership: fetch current user and compare
         try {
           const ures = await fetch('http://localhost:8000/api/user', { headers: { Authorization: `Bearer ${token}` } });
           if (!ures.ok) throw new Error(String(ures.status));
@@ -43,7 +42,6 @@ export default function EditPostPage() {
           const currentUserId = udata.id;
           const ownerId = data.created_by ?? data.user?.id;
           if (ownerId !== currentUserId) {
-            // not owner, redirect to post detail
             router.replace(`/posts/${id}`);
             return;
           }
