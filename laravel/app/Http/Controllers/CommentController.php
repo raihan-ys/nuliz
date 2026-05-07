@@ -29,8 +29,9 @@ class CommentController extends Controller
             'post_id' => 'required|exists:posts,id',
             'created_by' => 'required|exists:users,id',
         ]);
-
         Comment::create($validated);
+
+        return response()->json(['message' => 'Komentar berhasil ditambahkan'], 201);
     }
 
     public function update(Request $request, $id)
@@ -42,13 +43,16 @@ class CommentController extends Controller
             'post_id' => 'required|exists:posts,id',
             'created_by' => 'required|exists:users,id',
         ]);
-
         $comment->update($validated);
+
+        return response()->json(['message' => 'Komentar berhasil diperbarui']);
     }
 
     public function destroy($id)
     {
         $comment = Comment::findOrFail($id);
         $comment->delete();
+        
+        return response()->json(['message' => 'Komentar berhasil dihapus']);
     }
 }   
