@@ -27,8 +27,12 @@ class CommentController extends Controller
         $validated = $request->validate([
             'content' => 'required|string',
             'post_id' => 'required|exists:posts,id',
-            'created_by' => 'required|exists:users,id',
         ]);
+
+        // Use authenticated user as the writer of the comment
+        $user = $request->user();
+        $validated['created_by'] = $user->id;
+
         Comment::create($validated);
 
         return response()->json(['message' => 'Komentar berhasil ditambahkan'], 201);
@@ -41,8 +45,14 @@ class CommentController extends Controller
         $validated = $request->validate([
             'content' => 'required|string',
             'post_id' => 'required|exists:posts,id',
-            'created_by' => 'required|exists:users,id',
         ]);
+
+        // Check if the authenticated user is the writer of the comment
+        $user = $request->user();
+        if ($comment->created_by !== $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+
         $comment->update($validated);
 
         return response()->json(['message' => 'Komentar berhasil diperbarui']);
@@ -51,6 +61,13 @@ class CommentController extends Controller
     public function destroy($id)
     {
         $comment = Comment::findOrFail($id);
+
+        // Check if the authenticated user is the writer of the comment
+        $user = $request->user();
+        if ($comment->created_by !== $user->id) {
+            return response()->json(['message' => 'Unauthorized'], 403);
+        }
+        
         $comment->delete();
 
         return response()->json(['message' => 'Komentar berhasil dihapus']);
