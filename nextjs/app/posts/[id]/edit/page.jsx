@@ -107,7 +107,7 @@ export default function EditPostPage() {
           </div>
 
           <div className="flex items-center justify-between">
-            <button type="submit" className="btn rounded-full bg-black text-white px-6 py-2" disabled={saving}>{saving ? "Menyimpan..." : "Simpan"}</button>
+            <button type="submit" className="btn rounded-full bg-black text-white px-6 py-2 hover:bg-white hover:text-black" disabled={saving}>{saving ? "Menyimpan..." : "Simpan"}</button>
             <button type="button" className="btn btn-ghost rounded-full" onClick={() => router.back()}>Batal</button>
           </div>
         </form>

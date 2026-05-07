@@ -17,7 +17,7 @@ class CommentController extends Controller
             ->join('users', 'users.id', '=', 'comments.created_by')
             ->select('comments.*', 'users.name as writer')
             ->orderBy('content')
-            ->paginate(10);
+            ->get();
 
          return response()->json($comments);
     }
