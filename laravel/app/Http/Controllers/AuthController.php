@@ -6,6 +6,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Routing\Controller;
 
 // Auth controllers (register/login/logout) that use Laravel Sanctum for API token authentication
 class AuthController extends Controller

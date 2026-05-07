@@ -7,23 +7,34 @@ use App\Models\User;
 use App\Models\Comment;
 use Illuminate\Http\Request;
 use Illuminate\Validation\ValidationException;
+use Illuminate\Routing\Controller;
 
 class PostController extends Controller
 {
     public function index()
     {
-        $posts = Post::join('users', 'users.id', '=', 'post.created_by')
-            ->select('posts.*', 'users.name as author')
+        $posts = Post::withCount('comments')
+            ->with(['user:id,name'])
             ->orderBy('created_at', 'desc')
             ->paginate(10);
+
+        // Normalize author name to `author` field for frontend convenience
+        $posts->getCollection()->transform(function ($post) {
+            $post->author = $post->user->name ?? null;
+            return $post;
+        });
+
         return response()->json($posts);
     }
 
     public function show($id)
     {
-        $post = Post::findOrFail($id);
-        $user = User::findOrFail($post->created_by);
-        $comments = Comment::where('post_id', $id)->orderBy('content')->get();
+        $post = Post::with(['user:id,name', 'comments'])->withCount('comments')->findOrFail($id);
+
+        // attach author for convenience
+        $post->author = $post->user->name ?? null;
+
+        return response()->json($post);
     }
 
     public function store(Request $request)
@@ -33,8 +44,9 @@ class PostController extends Controller
             'content' => 'required|string',
             'created_by' => 'required|exists:users,id',
         ]);
+        $post = Post::create($validated);
 
-        Post::create($validated);
+        return response()->json($post, 201);
     }
 
     public function update(Request $request, $id)
@@ -48,11 +60,15 @@ class PostController extends Controller
         ]);
 
         $post->update($validated);
+
+        return response()->json($post);
     }
 
     public function destroy($id)
     {
         $post = Post::findOrFail($id);
         $post->delete();
+
+        return response()->json(null, 204);
     }
 }

@@ -11,29 +11,29 @@ export default function RegisterPage() {
     const [loading, setLoading] = useState(false);
     const [message, setMessage] = useState(null);
 
-    // Belajar API
     async function handleSubmit(e) {
         e.preventDefault();
         setLoading(true);
         setMessage(null);
 
         try {
-            const res = await fetch("/api/register", {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-                name,
-                email,
-                password,
-                password_confirmation: passwordConfirm,
-            }),
-        });
+            const res = await fetch("http://localhost:8000/api/register", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({
+                    name,
+                    email,
+                    password,
+                    password_confirmation: passwordConfirm,
+                }),
+            });
 
-        const data = await res.json();
+            const data = await res.json();
 
-        if (!res.ok) throw new Error(data.message || JSON.stringify(data));
+            // ERROR: Should only returns status code instead HTML page
+            if (!res.ok) throw new Error(data.message || JSON.stringify(data));
 
-        setMessage({ type: "success", text: `Token: ${data.access_token}` });
+            setMessage({ type: "success", text: `Token: ${data.access_token}` });
         } catch (err) {
             setMessage({ type: "error", text: err.message });
         } finally {

@@ -12,10 +12,11 @@ export default function PostsPage() {
   useEffect(() => {
     async function load() {
       try {
-        const res = await fetch("/api/posts");
-        if (!res.ok) throw new Error("Failed to load posts");
+        const res = await fetch("http://localhost:8000/api/posts");
+        if (!res.ok) throw new Error("Gagal memuat post");
         const data = await res.json();
-        setPosts(data);
+        // Laravel paginator returns { data: [...], ... }
+        setPosts(data.data ?? data);
       } catch (err) {
         setError(err.message);
       } finally {
@@ -63,12 +64,6 @@ export default function PostsPage() {
                         Oleh {post.author?.name ?? post.author ?? "Unknown"} • {post.comments_count ?? 0} komentar
                       </div>
                       <p className="mt-4 text-black/80">{truncate(post.content, 200)}</p>
-                    </div>
-
-                    {/* Thumbnail: optional image for post */}
-                    <div className="w-32 shrink-0">
-                      {/* Thumbnail image for the post goes here */}
-                      <Image src="" alt="post thumbnail" width={160} height={100} />
                     </div>
                   </div>
                 </article>

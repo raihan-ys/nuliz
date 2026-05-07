@@ -6,6 +6,8 @@ use App\Models\Post;
 use App\Models\User;
 use App\Models\Comment;
 use Illuminate\Http\Request;
+use Illuminate\Validation\ValidationException;
+use Illuminate\Routing\Controller;
 
 class CommentController extends Controller
 {
@@ -16,6 +18,8 @@ class CommentController extends Controller
             ->select('comments.*', 'users.name as author')
             ->orderBy('content')
             ->paginate(10);
+
+         return response()->json($comments);
     }
 
     public function store(Request $request)

@@ -22,8 +22,8 @@ class Comment extends model
      */
     public function user()
     {
-        // Define one-to-many relation with users table.
-        return $this->belongsTo(User::class);
+        // Define one to many relation with users table.
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**
@@ -31,7 +31,7 @@ class Comment extends model
      */
     public function post()
     {
-        // Define one-to-many relation with post table.
-        return $this->belongsTo(Post::class);
+        // Define one to many relation with posts table.
+        return $this->belongsTo(Post::class, 'post_id');
     }
 }
