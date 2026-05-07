@@ -15,6 +15,10 @@ export default function PostDetailPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+  const [showCommentModal, setShowCommentModal] = useState(false);
+  const [commentText, setCommentText] = useState("");
+  const [postingComment, setPostingComment] = useState(false);
+  const [commentError, setCommentError] = useState(null);
 
   const router = useRouter();
 
@@ -97,6 +101,12 @@ export default function PostDetailPage() {
             </div>
 
             <div className="flex items-center gap-3">
+                <button
+                  className="btn btn-outline btn-sm rounded-full"
+                  onClick={() => setShowCommentModal(true)}
+                >
+                  Tambah Komentar
+                </button>
               { (currentUserId && (post.created_by === currentUserId || post.user?.id === currentUserId)) && (
                 <>
                   <Link href={`/posts/${id}/edit`} className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white">
@@ -147,6 +157,58 @@ export default function PostDetailPage() {
             <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" onClick={handleDelete} disabled={deleting}>
               {deleting ? "Menghapus..." : "Hapus"}
             </button>
+          </div>
+        </div>
+
+        <div className={showCommentModal ? "modal modal-open" : "modal"}>
+          <div className="modal-box bg-white text-black max-w-2xl mx-auto">
+            <h3 className="font-bold text-lg">Tambahkan Komentar</h3>
+            <p className="py-2 text-sm text-black/70">Tulis komentar Anda untuk post ini.</p>
+
+            {commentError && <div className="text-red-600 mb-2">{commentError}</div>}
+
+            <form onSubmit={async (e) => {
+              e.preventDefault();
+              setPostingComment(true);
+              setCommentError(null);
+              try {
+                const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+                if (!token) {
+                  router.replace('/login');
+                  return;
+                }
+
+                const cres = await fetch(`http://localhost:8000/api/comments/`, {
+                  method: 'POST',
+                  headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+                  body: JSON.stringify({ content: commentText }),
+                });
+
+                if (!cres.ok) throw new Error(String(cres.status));
+
+                // refresh post
+                const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+                if (!pres.ok) throw new Error(String(pres.status));
+                const pdata = await pres.json();
+                setPost(pdata);
+                setCommentText("");
+                setShowCommentModal(false);
+              } catch (err) {
+                setCommentError(err.message);
+              } finally {
+                setPostingComment(false);
+              }
+            }} className="space-y-4 mt-4">
+              <div>
+                <label className="label"><span className="label-text">Komen...</span></label>
+                <textarea required value={commentText} onChange={(e) => setCommentText(e.target.value)} className="textarea textarea-bordered w-full bg-white text-black h-32" />
+              </div>
+
+              <div className="flex items-center justify-center gap-4">
+                <button type="submit" className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" disabled={postingComment}>{postingComment ? 'Mengirim...' : 'Kirim'}</button>
+                <button type="button" className="btn btn-ghost rounded-full" onClick={() => setShowCommentModal(false)}>Batal</button>
+              </div>
+            </form>
           </div>
         </div>
       </div>
