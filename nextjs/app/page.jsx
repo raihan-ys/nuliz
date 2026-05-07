@@ -13,12 +13,9 @@ export default function Home() {
             <a className="text-sm hover:underline" href="#features">
               Fitur
             </a>
-            <a className="text-sm hover:underline" href="#posts">
-              Contoh
-            </a>
             <a
               className="p-3 btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white"
-              href="#get-started"
+              href="/login"
             >
               Mulai
             </a>
@@ -81,21 +78,6 @@ export default function Home() {
               <h3 className="text-lg font-semibold">Ubah Sesukamu</h3>
               <p className="mt-2 text-sm text-black/75">Ubah tulisanmu kapan saja.</p>
             </div>
-          </div>
-        </section>
-
-        <section id="posts" className="mt-20">
-          <h2 className="text-2xl font-bold">Cerita Terbaru</h2>
-          <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            <article className="border border-black p-6">
-              <h3 className="text-lg font-semibold">Judul Post Pertama</h3>
-              <p className="mt-2 text-sm text-black/75">Cuplikan singkat dari cerita untuk menarik pembaca.</p>
-            </article>
-
-            <article className="border border-black p-6">
-              <h3 className="text-lg font-semibold">Judul Post Kedua</h3>
-              <p className="mt-2 text-sm text-black/75">Cuplikan singkat lainnya untuk ilustrasi tampilan.</p>
-            </article>
           </div>
         </section>
       </main>

@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function CreatePostPage() {
   const router = useRouter();
-  const author = "1"; // Placeholder, replace with actual user data
+  const created_by = "1"; // Placeholder, replace with actual user data
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -21,7 +21,7 @@ export default function CreatePostPage() {
       const res = await fetch("http://localhost:8000/api/posts/", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title, content, author }),
+        body: JSON.stringify({ title, content, created_by }),
       });
 
       if (!res.ok) throw new Error("Gagal menyimpan tulisan");
@@ -40,7 +40,7 @@ export default function CreatePostPage() {
     <div className="min-h-screen bg-white text-black font-sans flex items-center justify-center">
       <div className="w-full max-w-2xl p-8">
         <header className="mb-6 flex flex-col items-center">
-          <Image src="/images/createPostLogo.png" alt="create post banner" width={120} height={80} />
+          <Image src="/images/writingPoster.png" alt="Writing Image" width={120} height={80} />
           <h1 className="mt-4 text-2xl font-bold">Buat Post Baru</h1>
         </header>
 
