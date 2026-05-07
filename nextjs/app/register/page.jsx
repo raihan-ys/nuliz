@@ -36,7 +36,7 @@ export default function RegisterPage() {
             // if backend returned non-ok, surface the HTTP status code
             if (!res.ok) throw new Error(String(res.status));
 
-            setMessage({ type: "success", text: `Token: ${data.access_token}` });
+            setMessage({ type: "success", text: "Akun berhasil dibuat!" });
             // store token for protected API calls
             try { localStorage.setItem('token', data.access_token); } catch (e) {}
             router.push('/posts');
