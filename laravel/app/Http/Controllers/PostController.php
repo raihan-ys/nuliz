@@ -10,13 +10,13 @@ use Illuminate\Validation\ValidationException;
 
 class PostController extends Controller
 {
-    
     public function index()
     {
         $posts = Post::join('users', 'users.id', '=', 'post.created_by')
             ->select('posts.*', 'users.name as author')
-            ->orderBy('title')
+            ->orderBy('created_at', 'desc')
             ->paginate(10);
+        return response()->json($posts);
     }
 
     public function show($id)
