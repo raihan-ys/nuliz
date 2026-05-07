@@ -25,4 +25,11 @@ Route::middleware('auth:sanctum')->group(function() {
         Route::put('/{id}', [PostController::class, 'update']);
         Route::delete('/{id}', [PostController::class, 'destroy']);
     });
+
+    // Comment routes
+    Route::prefix('comments')->group(function() {
+        Route::post('/', [CommentController::class, 'store']);
+        Route::put('/{id}', [CommentController::class, 'update']);
+        Route::delete('/{id}', [CommentController::class, 'destroy']);
+    });
 });
