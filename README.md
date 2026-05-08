@@ -43,4 +43,5 @@
    - Masuk ke folder `nextjs` dan jalankan `npm install`.
    - Jalankan `npm run dev` untuk memulai development server.
 5. Buka aplikasi di `http://localhost:3000` di browser.
+6. Aplikasi siap digunakan.
 </code></pre>
