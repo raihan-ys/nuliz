@@ -169,15 +169,17 @@ export default function PostDetailPage() {
               setCommentError(null);
               try {
                 const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+                const postId = id;
+
                 if (!token) {
                   router.replace('/login');
                   return;
                 }
-
+                
                 const cres = await fetch(`http://localhost:8000/api/comments/`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                  body: JSON.stringify({ content: commentText }),
+                  body: JSON.stringify({ content: commentText, post_id: postId }),
                 });
 
                 if (!cres.ok) throw new Error(String(cres.status));
@@ -197,7 +199,7 @@ export default function PostDetailPage() {
             }} className="space-y-4 mt-4">
               <div>
                 <label className="label"><span className="label-text">Komen...</span></label>
-                <textarea required value={commentText} onChange={(e) => setCommentText(e.target.value)} className="textarea textarea-bordered w-full bg-white text-black h-32" />
+                <textarea required value={commentText} onChange={(e) => setCommentText(e.target.value)} className="textarea textarea-bordered w-full bg-white border border-black text-black h-32" />
               </div>
 
               <div className="flex items-center justify-center gap-4">
