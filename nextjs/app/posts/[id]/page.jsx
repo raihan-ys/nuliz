@@ -131,6 +131,7 @@ export default function PostDetailPage() {
               {(post.comments || []).map((c) => (
                 <div key={c.id} className="border border-black p-4">
                   <div className="text-sm font-semibold">{c.writer ?? "Anonim"}</div>
+                  <div className="text-xs text-black/70 mb-2">{new Date(c.created_at).toLocaleString()}</div>
                   <div className="mt-2 text-sm text-black/80">{c.content}</div>
                 </div>
               ))}
@@ -175,7 +176,7 @@ export default function PostDetailPage() {
                   router.replace('/login');
                   return;
                 }
-                
+
                 const cres = await fetch(`http://localhost:8000/api/comments/`, {
                   method: 'POST',
                   headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
