@@ -1,11 +1,11 @@
-<h1>Nuliz - aplikasi menulis berbasis web</h1>
-<p>Aplikasi ini dikembangkan oleh saya untuk memenuhi sebuah technical test. Env diconfig untuk local.</p>
+<h1>Nuliz - Web based Blogging Application</h1>
+<p>Aplikasi ini dikembangkan oleh saya untuk memenuhi sebuah technical test. env diconfig untuk local.</p>
 
 <h2>Tech Stack</h2>
 <ul>
     <li>PHP 8.2</li>
-    <li>Laravel 12</li>
     <li>MySQL</li>
+    <li>Laravel 12</li>
     <li>Next.js</li>
     <li>Tailwind CSS</li>
 </ul>
@@ -14,9 +14,9 @@
 <ul>
     <li>CRUD Postingan: User dapat membuat, membaca, memperbarui, dan menghapus postingan mereka sendiri.</li>
     <li>Autentikasi: User dapat register, login dan logout.</li>
-    <li>API Terproteksi: Semua endpoint post dilindungi dengan token akses yang dikeluarkan saat login.</li>
-    <li>UI Responsif</li>
-    <li>NOTE: fitur komentar masih dalam pengembangan, sehingga saat ini hanya dapat menampilkan</li>
+    <li>API Terproteksi: Semua endpoint post dilindungi dengan token akses yang dihasilkan saat login.</li>
+    <li>UI Responsif (Made with DaisyUI).</li>
+    <li>NOTE: fitur komentar masih dalam tahap pengembangan.</li>
 </ul>
 
 <h2>Cara menjalankan di local machine (with Docker)</h2>
@@ -43,4 +43,5 @@
    - Masuk ke folder `nextjs` dan jalankan `npm install`.
    - Jalankan `npm run dev` untuk memulai development server.
 5. Buka aplikasi di `http://localhost:3000` di browser.
+6. Aplikasi siap digunakan.
 </code></pre>
