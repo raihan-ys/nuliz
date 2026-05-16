@@ -13,7 +13,7 @@
 <h2>Features</h2>
 <ul type="square">
     <li>CRUD Postingan: User dapat membuat, membaca, memperbarui, dan menghapus postingan mereka sendiri.</li>
-    <li>Autentikasi: User dapat register, login dan logout.</li>
+    <li>Token-based auth menggunakan Laravel Sanctum</li>
     <li>API Terproteksi: Semua endpoint post dilindungi dengan token akses yang dihasilkan saat login.</li>
     <li>UI Responsif (Made with DaisyUI).</li>
     <li>NOTE: fitur CRUD komentar masih dalam tahap pengembangan.</li>
