@@ -18,12 +18,12 @@ class CommentSeeder extends Seeder
             [
                 'content' => 'This is a comment on Post 1.',
                 'created_by' => 1, // Assuming the user with ID 1 is the writer
-                'post_id' => 1, // Assuming the comment is on Post 1
+                'post_id' => 1, // Assuming the comment is on post with ID 1
                 'created_at' => now(),
             ],
             [
                 'content' => 'This is another comment on Post 1.',
-                'created_by' => 2, // Assuming the user with ID 2 is the writer
+                'created_by' => 2,
                 'post_id' => 1,
                 'created_at' => now(),
             ],
