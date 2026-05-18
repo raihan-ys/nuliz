@@ -61,6 +61,21 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+         <section id="posts" className="mt-20">
+          <h2 className="text-2xl font-bold">Contoh Postingan</h2>
+          <div className="mt-6 grid gap-6 sm:grid-cols-2">
+            <article className="border border-black p-6">
+              <h3 className="text-lg font-semibold">Judul Post Pertama</h3>
+              <p className="mt-2 text-sm text-black/75">Cuplikan singkat dari cerita untuk menarik pembaca.</p>
+            </article>
+
+            <article className="border border-black p-6">
+              <h3 className="text-lg font-semibold">Judul Post Kedua</h3>
+              <p className="mt-2 text-sm text-black/75">Cuplikan singkat lainnya untuk ilustrasi tampilan.</p>
+            </article>
+          </div>
+        </section>
       </main>
     </div>
   );
