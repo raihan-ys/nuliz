@@ -8,7 +8,6 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 use Illuminate\Routing\Controller;
 
-// Auth controllers (register/login/logout) that use Laravel Sanctum for API token authentication
 class AuthController extends Controller
 {
     public function register(Request $request)
@@ -25,7 +24,7 @@ class AuthController extends Controller
             'password' => Hash::make($request->password),
         ]);
 
-        // Generate API token for the newly registered user
+        // Generate API token for the user
         $token = $user->createToken('api_token')->plainTextToken;
 
         return response()->json(
@@ -50,6 +49,7 @@ class AuthController extends Controller
             ]);
         }
 
+        // Generate API token for the user
         $token = $user->createToken('api_token')->plainTextToken;
 
         return response()->json([
@@ -60,6 +60,7 @@ class AuthController extends Controller
 
     public function logout(Request $request)
     {
+        // Delete the current access token to log the user out
         $request->user()->currentAccessToken()->delete();
 
         return response()->json(['message' => 'Telah logout'], 200);

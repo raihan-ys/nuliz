@@ -11,17 +11,6 @@ use Illuminate\Routing\Controller;
 
 class CommentController extends Controller
 {
-    public function index()
-    {
-        $comments = Comment::join('posts', 'posts.id', '=', 'comments.post_id')
-            ->join('users', 'users.id', '=', 'comments.created_by')
-            ->select('comments.*', 'users.name as writer')
-            ->orderBy('content')
-            ->get();
-
-         return response()->json($comments);
-    }
-
     public function store(Request $request)
     {
         $validated = $request->validate([
@@ -50,12 +39,12 @@ class CommentController extends Controller
         // Check if the authenticated user is the writer of the comment
         $user = $request->user();
         if ($comment->created_by !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Anda tidak memiliki izin untuk mengedit komentar ini'], 403);
         }
 
         $comment->update($validated);
 
-        return response()->json(['message' => 'Komentar berhasil diperbarui']);
+        return response()->json(['message' => 'Komentar berhasil diperbarui'], 200);
     }
 
     public function destroy($id)
@@ -65,11 +54,11 @@ class CommentController extends Controller
         // Check if the authenticated user is the writer of the comment
         $user = $request->user();
         if ($comment->created_by !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Anda tidak memiliki izin untuk menghapus komentar ini'], 403);
         }
         
         $comment->delete();
 
-        return response()->json(['message' => 'Komentar berhasil dihapus']);
+        return response()->json(['message' => 'Komentar berhasil dihapus'], 200);
     }
-}   
+}

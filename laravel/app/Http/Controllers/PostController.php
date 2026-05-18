@@ -24,7 +24,7 @@ class PostController extends Controller
             return $post;
         });
 
-        return response()->json($posts);
+        return response()->json($posts, 200);
     }
 
     public function show($id)
@@ -32,7 +32,7 @@ class PostController extends Controller
         $post = Post::with(['user:id,name', 'comments'])->withCount('comments')->findOrFail($id);
         $post->writer = $post->user->name ?? null;
 
-        return response()->json($post);
+        return response()->json($post, 200);
     }
 
     public function store(Request $request)
@@ -56,7 +56,7 @@ class PostController extends Controller
         // Check if the authenticated user is the writer of the post
         $user = $request->user();
         if ($post->created_by !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Anda tidak memiliki izin untuk mengedit postingan ini'], 403);
         }
 
         $validated = $request->validate([
@@ -65,7 +65,7 @@ class PostController extends Controller
         ]);
         $post->update($validated);
 
-        return response()->json($post);
+        return response()->json($post, 200);
     }
 
     public function destroy($id)
@@ -74,10 +74,11 @@ class PostController extends Controller
 
         $user = request()->user();
         if ($post->created_by !== $user->id) {
-            return response()->json(['message' => 'Unauthorized'], 403);
+            return response()->json(['message' => 'Anda tidak memiliki izin untuk menghapus postingan ini'], 403);
         }
+
         $post->delete();
 
-        return response()->json(['message' => 'Post berhasil dihapus'], 200);
+        return response()->json(['message' => 'Postingan berhasil dihapus'], 200);
     }
 }
