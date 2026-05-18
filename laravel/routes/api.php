@@ -9,7 +9,7 @@ use App\Http\Controllers\CommentController;
 Route::post('/register', [AuthController::class, 'register']);
 Route::post('/login', [AuthController::class, 'login']);
 
-// Route that requires authentication
+// Route that requires authentication (token-based)
 Route::middleware('auth:sanctum')->group(function() {
     // User routes
     Route::post('/logout', [AuthController::class, 'logout']);
