@@ -37,7 +37,7 @@ export default function RegisterPage() {
 
             setMessage({ type: "success", text: "Akun berhasil dibuat!" });
 
-            // Store token for protected API calls
+            // Store user's token in local storage
             try { localStorage.setItem('token', data.access_token); } catch (e) {}
             router.push('/posts');
         } catch (err) {
