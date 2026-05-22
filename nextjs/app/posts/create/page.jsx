@@ -12,6 +12,30 @@ export default function CreatePostPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
+  useEffect(() => {
+    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+   
+    // If no token, redirect to login immediately
+    if (!token) {
+      router.replace('/login');
+      return;
+    }
+
+    (async () => {
+      try {
+        const res = await fetch('http://localhost:8000/api/user', {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        if (!res.ok) throw new Error(String(res.status));
+        const u = await res.json();
+        setCreatedBy(u.id);
+      } catch (err) {
+        // if user can't be retrieved, force login
+        router.replace('/login');
+      }
+    })();
+  }, [router]);
+
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);

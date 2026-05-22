@@ -30,7 +30,11 @@ export default function LoginPage() {
       setMessage({ type: "success", text: "Login berhasil!" });
       
       // Store token for protected API calls
-      try { localStorage.setItem('token', data.access_token); } catch (e) {}
+      try { 
+        localStorage.setItem('token', data.access_token); 
+      } catch (e) {}
+
+      // Redirect to posts page after successful login
       router.push('/posts');
     } catch (err) {
       setMessage({ type: "error", text: err.message });
