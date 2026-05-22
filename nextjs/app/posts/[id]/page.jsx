@@ -57,10 +57,10 @@ export default function PostDetailPage() {
 
     load();
   }, [id]);
-
-  if (loading) return <div className="p-6">Memuat...</div>;
-  if (error) return <div className="p-6 text-red-600">{error}</div>;
-  if (!post) return <div className="p-6">Tidak ditemukan</div>;
+  
+  if (loading) return <div className="p-6 text-center text-xl">Memuat...</div>;
+  if (error) return <div className="p-6 text-red-600 text-center text-xl">{error}</div>;
+  if (!post) return <div className="p-6 text-center text-xl">Tidak ditemukan</div>;
 
   async function handleDelete() {
     setDeleting(true);
@@ -94,7 +94,9 @@ export default function PostDetailPage() {
           <header className="mb-6 flex items-center justify-between gap-4">
             <div>
               <h1 className="text-3xl font-bold">{post.title}</h1>
-              <div className="mt-2 text-sm text-black/70">Oleh {post.writer?.name ?? post.writer ?? "Unknown"}</div>
+              <div className="mt-2 text-sm text-black/70">
+                Oleh {post.writer?.name ?? post.writer ?? "Anonim"} - {new Date(post.created_at).toLocaleString()}
+              </div>
             </div>
 
             <div className="flex items-center gap-3">
