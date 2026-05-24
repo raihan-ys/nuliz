@@ -132,7 +132,24 @@ export default function PostDetailPage() {
               {(post.comments || []).length === 0 && <div className="text-black/70">Belum ada komentar.</div>}
               {(post.comments || []).map((c) => (
                 <div key={c.id} className="border border-black p-4">
-                  <div className="text-sm font-semibold">{c.user.name ?? "Anonim"}</div>
+
+                  {/* TODO: Tambah tombol edit dan hapus bila user yang login adalah pembuat komentar */}
+                  <div className="text-sm font-semibold flex items-center">
+                    {c.user.name ?? "Anonim"}
+                    { (c.created_by === currentUserId) && (
+                    <>
+                      <Link href={`/comments/${id}/edit`} className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white">
+                        Edit
+                      </Link>
+                      <button
+                        className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
+                        onClick={() => setShowDeleteModal(true)}
+                      >
+                        Hapus
+                      </button>
+                    </>
+              )}
+                  </div>
                   <div className="text-xs text-black/70 mb-2">{new Date(c.created_at).toLocaleString()}</div>
                   <div className="mt-2 text-sm text-black/80">{c.content}</div>
                 </div>
