@@ -38,7 +38,7 @@ export default function PostDetailPage() {
         const data = await res.json();
         setPost(data);
 
-        // Fetch current user id to determine ownership
+        // Fetch current user ID to determine ownership
         try {
           const ures = await fetch('http://localhost:8000/api/user', { headers: { Authorization: `Bearer ${token}` } });
           if (ures.ok) {
@@ -134,23 +134,25 @@ export default function PostDetailPage() {
                 <div key={c.id} className="border border-black p-4">
 
                   {/* TODO: Tambah tombol edit dan hapus bila user yang login adalah pembuat komentar */}
-                  <div className="text-sm font-semibold flex items-center">
-                    {c.user.name ?? "Anonim"}
-                    { (c.created_by === currentUserId) && (
+                  <div className="text-sm font-semibold flex items-center gap-3">
+
+                  {/* TODO: tambah fitur untuk edit dan hapus komen */}
+                    <span className="mr-auto">{c.user.name ?? "Anonim"}</span>
+                    { (c.user.id === currentUserId) && (
                     <>
                       <Link href={`/comments/${id}/edit`} className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white">
                         Edit
                       </Link>
                       <button
                         className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
-                        onClick={() => setShowDeleteModal(true)}
                       >
                         Hapus
                       </button>
                     </>
-              )}
+                    )}
+
                   </div>
-                  <div className="text-xs text-black/70 mb-2">{new Date(c.created_at).toLocaleString()}</div>
+                  <div className="text-xs text-black/70 mb-3">{new Date(c.created_at).toLocaleString()}</div>
                   <div className="mt-2 text-sm text-black/80">{c.content}</div>
                 </div>
               ))}
