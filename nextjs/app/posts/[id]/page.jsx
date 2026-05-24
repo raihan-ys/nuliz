@@ -132,7 +132,7 @@ export default function PostDetailPage() {
               {(post.comments || []).length === 0 && <div className="text-black/70">Belum ada komentar.</div>}
               {(post.comments || []).map((c) => (
                 <div key={c.id} className="border border-black p-4">
-                  <div className="text-sm font-semibold">{c.writer ?? "Anonim"}</div>
+                  <div className="text-sm font-semibold">{c.user.name ?? "Anonim"}</div>
                   <div className="text-xs text-black/70 mb-2">{new Date(c.created_at).toLocaleString()}</div>
                   <div className="mt-2 text-sm text-black/80">{c.content}</div>
                 </div>

@@ -29,7 +29,8 @@ class PostController extends Controller
 
     public function show($id)
     {
-        $post = Post::with(['user:id,name', 'comments'])->withCount('comments')->findOrFail($id);
+        // TODO: Get the comment's writer
+        $post = Post::with(['user:id,name', 'comments.user:id,name'])->withCount('comments')->findOrFail($id);
         $post->writer = $post->user->name ?? null;
 
         return response()->json($post, 200);
