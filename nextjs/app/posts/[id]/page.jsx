@@ -11,7 +11,8 @@ export default function PostDetailPage() {
   const [error, setError] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
-  const [showEditComModal, setShowEditComModal]
+  const [showEditComModal, setShowEditComModal] = useState(false);
+  const [showDeleteComModal, setShowDeleteComModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
   const [showCommentModal, setShowCommentModal] = useState(false);
