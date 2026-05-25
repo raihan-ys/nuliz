@@ -26,13 +26,16 @@ export default function PostDetailPage() {
     if (!id) return;
 
     async function load() {
+      // Get client's token
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
+      // Redirect to login page if no token
       if (!token) {
-        router.replace('/login');
-        return;
+        router.push('/login');
       }
 
       try {
+        // Get current post details
         const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
