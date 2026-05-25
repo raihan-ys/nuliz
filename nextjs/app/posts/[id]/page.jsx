@@ -11,6 +11,7 @@ export default function PostDetailPage() {
   const [error, setError] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showEditComModal, setShowEditComModal]
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
   const [showCommentModal, setShowCommentModal] = useState(false);
@@ -133,16 +134,16 @@ export default function PostDetailPage() {
               {(post.comments || []).map((c) => (
                 <div key={c.id} className="border border-black p-4">
 
-                  {/* TODO: Tambah tombol edit dan hapus bila user yang login adalah pembuat komentar */}
                   <div className="text-sm font-semibold flex items-center gap-3">
 
                   {/* TODO: tambah fitur untuk edit dan hapus komen */}
                     <span className="mr-auto">{c.user.name ?? "Anonim"}</span>
                     { (c.user.id === currentUserId) && (
                     <>
-                      <Link href={`/comments/${id}/edit`} className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white">
+                      {/* TODO: Buat modal untuk edit komentar */}
+                      <button className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white" >
                         Edit
-                      </Link>
+                      </button>
                       <button
                         className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
                       >
