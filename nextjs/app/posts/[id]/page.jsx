@@ -11,11 +11,11 @@ export default function PostDetailPage() {
   const [error, setError] = useState(null);
   const [currentUserId, setCurrentUserId] = useState(null);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [addComModal, setAddComModal] = useState(false);
   const [showEditComModal, setShowEditComModal] = useState(false);
   const [showDeleteComModal, setShowDeleteComModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
-  const [showCommentModal, setShowCommentModal] = useState(false);
   const [commentText, setCommentText] = useState("");
   const [postingComment, setPostingComment] = useState(false);
   const [commentError, setCommentError] = useState(null);
@@ -25,6 +25,7 @@ export default function PostDetailPage() {
   useEffect(() => {
     if (!id) return;
 
+    // On page loading
     async function load() {
       // Get client's token
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
@@ -36,25 +37,23 @@ export default function PostDetailPage() {
 
       try {
         // Get current post details
-        const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const res = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
         if (!res.ok) throw new Error(String(res.status));
         const data = await res.json();
         setPost(data);
 
-        // Fetch current user ID to determine ownership
+        // Get current user ID to determine post ownership
         try {
-          const ures = await fetch('http://localhost:8000/api/user', { headers: { Authorization: `Bearer ${token}` } });
-          if (ures.ok) {
-            const udata = await ures.json();
+          const user = await fetch('http://localhost:8000/api/user', { headers: { Authorization: `Bearer ${token}` } });
+          if (user.ok) {
+            const udata = await user.json();
             setCurrentUserId(udata.id);
           }
         } catch (e) {
-          // ignore
+          setError(e.message);
         }
-      } catch (err) {
-        setError(err.message);
+      } catch (e) {
+        setError(e.message);
       } finally {
         setLoading(false);
       }
@@ -67,6 +66,7 @@ export default function PostDetailPage() {
   if (error) return <div className="p-6 text-red-600 text-center text-xl">{error}</div>;
   if (!post) return <div className="p-6 text-center text-xl">Tidak ditemukan</div>;
 
+  // Handle post deletion
   async function handleDelete() {
     setDeleting(true);
     setDeleteError(null);
@@ -84,8 +84,8 @@ export default function PostDetailPage() {
 
       router.push("/posts");
       return;
-    } catch (err) {
-      setDeleteError(err.message);
+    } catch (e) {
+      setDeleteError(e.message);
     } finally {
       setDeleting(false);
       setShowDeleteModal(false);
@@ -96,29 +96,31 @@ export default function PostDetailPage() {
     <div className="min-h-screen bg-white text-black font-sans">
       <main className="mx-auto max-w-4xl px-6 py-12">
         <article className="prose prose-sm">
+
           <header className="mb-6 flex items-center justify-between gap-4">
+
+            {/* Post title */}
             <div>
               <h1 className="text-3xl font-bold">{post.title}</h1>
               <div className="mt-2 text-sm text-black/70">
-                Oleh {post.writer?.name ?? post.writer ?? "Anonim"} - {new Date(post.created_at).toLocaleString()}
+                Oleh {post.writer.name ?  post.writer.name : "Anonim"} - {new Date(post.created_at).toLocaleString()}
               </div>
             </div>
 
+            {/* Buttons */}
             <div className="flex items-center gap-3">
-                <button
-                  className="btn btn-outline btn-sm rounded-full"
-                  onClick={() => setShowCommentModal(true)}
-                >
-                  Tambah Komentar
-                </button>
-              { (currentUserId && (post.created_by === currentUserId || post.user?.id === currentUserId)) && (
+
+              {/* Add new comment */}
+              <button className="btn btn-outline btn-sm rounded-full" onClick={() => setAddComModal(true)}>
+                Tambah Komentar
+              </button>
+              
+              {(post.created_by === currentUserId ) && (
                 <>
                   <Link href={`/posts/${id}/edit`} className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white">
                     Edit
                   </Link>
-                  <button
-                    className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black"
-                    onClick={() => setShowDeleteModal(true)}
+                  <button className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black" onClick={() => setShowDeleteModal(true)}
                   >
                     Hapus
                   </button>
@@ -183,7 +185,7 @@ export default function PostDetailPage() {
           </div>
         </div>
 
-        <div className={showCommentModal ? "modal modal-open" : "modal"}>
+        <div className={showAddComModal ? "modal modal-open" : "modal"}>
           <div className="modal-box bg-white text-black max-w-2xl mx-auto">
             <h3 className="font-bold text-lg">Tambahkan Komentar</h3>
             <p className="py-2 text-sm text-black/70">Tulis komentar Anda untuk post ini.</p>
@@ -217,7 +219,7 @@ export default function PostDetailPage() {
                 const pdata = await pres.json();
                 setPost(pdata);
                 setCommentText("");
-                setShowCommentModal(false);
+                setAddComModal(false);
               } catch (err) {
                 setCommentError(err.message);
               } finally {
@@ -231,7 +233,7 @@ export default function PostDetailPage() {
 
               <div className="flex items-center justify-center gap-4">
                 <button type="submit" className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" disabled={postingComment}>{postingComment ? 'Mengirim...' : 'Kirim'}</button>
-                <button type="button" className="btn btn-ghost rounded-full" onClick={() => setShowCommentModal(false)}>Batal</button>
+                <button type="button" className="btn btn-ghost rounded-full" onClick={() => setAddComModal(false)}>Batal</button>
               </div>
             </form>
           </div>
