@@ -22,14 +22,14 @@ export default function PostDetailPage() {
 
   const router = useRouter();
 
+  // Get client's token
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
   useEffect(() => {
     if (!id) return;
 
     // On page loading
     async function load() {
-      // Get client's token
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-
       // Redirect to login page if no token
       if (!token) {
         router.push('/login');
@@ -72,7 +72,6 @@ export default function PostDetailPage() {
     setDeleteError(null);
 
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -198,13 +197,7 @@ export default function PostDetailPage() {
             setPostingComment(true);
             setCommentError(null);
             try {
-              const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
               const postId = id;
-
-              if (!token) {
-                router.replace('/login');
-                return;
-              }
 
               const cres = await fetch(`http://localhost:8000/api/comments/`, {
                 method: 'POST',
@@ -244,7 +237,6 @@ export default function PostDetailPage() {
       <div className={editComModal ? "modal modal-open" : "modal"}>
         <div className="modal-box bg-white text-black max-w-2xl mx-auto">
           <h3 className="font-bold text-lg">Edit Komentar Anda</h3>
-          <p className="py-2 text-sm text-black/70">Tulis komentar Anda untuk post ini.</p>
 
           {commentError && <div className="text-red-600 mb-2">{commentError}</div>}
 
@@ -253,14 +245,6 @@ export default function PostDetailPage() {
             setPostingComment(true);
             setCommentError(null);
             try {
-              const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-              const postId = id;
-
-              if (!token) {
-                router.replace('/login');
-                return;
-              }
-
               const cres = await fetch(`http://localhost:8000/api/comments/`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
