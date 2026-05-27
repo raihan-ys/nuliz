@@ -13,6 +13,7 @@ export default function CreatePostPage() {
   const [message, setMessage] = useState(null);
 
   useEffect(() => {
+    // Get client's token
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
    
     // If no token, redirect to login immediately
@@ -27,10 +28,12 @@ export default function CreatePostPage() {
           headers: { Authorization: `Bearer ${token}` },
         });
         if (!res.ok) throw new Error(String(res.status));
+
+        // Get current user's ID
         const u = await res.json();
         setCreatedBy(u.id);
-      } catch (err) {
-        // if user can't be retrieved, force login
+      } catch (e) {
+        // If user can't be retrieved, force login
         router.replace('/login');
       }
     })();

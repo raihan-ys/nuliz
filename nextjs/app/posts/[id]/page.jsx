@@ -144,11 +144,10 @@ export default function PostDetailPage() {
                     <span className="mr-auto">{c.user.name ?? "Anonim"}</span>
                     { (c.user.id === currentUserId) && (
                     <>
-                      {/* TODO: Buat modal untuk edit komentar */}
-                      <button className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white" >
+                      <button className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white" onClick={() => setEditComModal(true)}>
                         Edit
                       </button>
-                      <button className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black">
+                      <button className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black" onClick={() => setDeleteComModal(true)}>
                         Hapus
                       </button>
                     </>
@@ -245,8 +244,8 @@ export default function PostDetailPage() {
             setPostingComment(true);
             setCommentError(null);
             try {
-              const cres = await fetch(`http://localhost:8000/api/comments/`, {
-                method: 'POST',
+              const cres = await fetch(`http://localhost:8000/api/comments/${comId}`, {
+                method: 'PUT',
                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
                 body: JSON.stringify({ content: commentText, post_id: postId }),
               });
@@ -273,7 +272,7 @@ export default function PostDetailPage() {
 
             <div className="flex items-center justify-center gap-4">
               <button type="submit" className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" disabled={postingComment}>{postingComment ? 'Mengirim...' : 'Kirim'}</button>
-              <button type="button" className="btn btn-ghost rounded-full" onClick={() => setAddComModal(false)}>Batal</button>
+              <button type="button" className="btn btn-ghost rounded-full" onClick={() => setEditComModal(false)}>Batal</button>
             </div>
           </form>
         </div>
