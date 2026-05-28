@@ -164,10 +164,18 @@ export default function PostDetailPage() {
                               const cres = await fetch(`http://localhost:8000/api/comments/${c.id}`, {
                                 method: 'PUT',
                                 headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                                body: JSON.stringify({ content: c.content }),
+                                body: JSON.stringify({ content: editComText }),
                               });
 
                               if (!cres.ok) throw new Error(String(cres.status));
+
+                              // Refresh current post
+                              const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+                              if (!pres.ok) throw new Error(String(pres.status));
+                              const pdata = await pres.json();
+                              setPost(pdata);
+                              setEditComText("");
+                              setEditComModal(false);
                             } catch (e) {
                               setCommentError(e.message);
                             } finally {
@@ -176,14 +184,14 @@ export default function PostDetailPage() {
                           }} className="space-y-4 mt-4">
                             <div>
                               <label className="label"><span className="label-text">Komen...</span></label>
-                             
+                              
                               <textarea required value={editComText} onChange={(e) => setEditComText(e.target.value)} className="textarea textarea-bordered w-full bg-white border border-black text-black h-32" />
                             </div>
 
                             <div className="flex items-center justify-center gap-4">
                               {/* Submit */}
                               <button type="submit" className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" disabled={postingComment}>{postingComment ? 'Mengubah...' : 'Ubah'}</button>
-                              {/* Delete */}
+                              {/* Cancel */}
                               <button type="button" onClick={() => setEditComModal(false)} className="btn btn-ghost rounded-full">Batal</button>
                             </div>
                           </form>
@@ -191,7 +199,7 @@ export default function PostDetailPage() {
                       </div>
 
                       {/* Edit button */}
-                      <button className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white" onClick={() => setEditComModal(true)}>
+                      <button className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white" onClick={() => { setEditComText(c.content); setEditComModal(true); }}>
                         Edit
                       </button>
 
