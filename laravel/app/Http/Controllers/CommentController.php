@@ -32,8 +32,7 @@ class CommentController extends Controller
         $comment = Comment::findOrFail($id);
 
         $validated = $request->validate([
-            'content' => 'required|string',
-            'post_id' => 'required|exists:posts,id',
+            'content' => 'required|string'
         ]);
 
         // Check if the authenticated user is the writer of the comment
