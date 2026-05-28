@@ -255,6 +255,7 @@ export default function PostDetailPage() {
               // Refresh post
               const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
               if (!pres.ok) throw new Error(String(pres.status));
+              
               const pdata = await pres.json();
               setPost(pdata);
               setCommentText("");
