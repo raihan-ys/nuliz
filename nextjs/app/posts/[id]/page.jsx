@@ -198,6 +198,27 @@ export default function PostDetailPage() {
                         </div>
                       </div>
 
+                      {/* Delete comment modal */}
+                      <div className={deleteComModal ? "modal modal-open" : "modal"}>
+                        <div className="modal-box text-center bg-white text-black">
+                          <h3 className="font-bold text-lg">Hapus komentar?</h3>
+                          <p className="py-4">Apakah Anda yakin ingin menghapus komentar? Operasi ini tidak bisa dibatalkan.</p>
+
+                          {/* Error message */}
+                          {commentError && <div className="text-red-600 mb-2">{commentError}</div>}
+
+                          <div className="modal-action justify-center">
+                            <button className="btn btn-ghost rounded-full border border-black" onClick={() => setDeleteComModal(false)}>
+                              Tidak
+                            </button>
+                            {/* TODO: Create a function to handle comment deletion */}
+                            <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black">
+                              {deleting ? "Menghapus..." : "Hapus"}
+                            </button>
+                          </div>
+                        </div>
+                      </div>
+
                       {/* Edit button */}
                       <button className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white" onClick={() => { setEditComText(c.content); setEditComModal(true); }}>
                         Edit
