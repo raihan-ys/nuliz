@@ -180,7 +180,7 @@ export default function PostDetailPage() {
                     
                       {/* Edit comment modal */}
                       <div className={editComModal ? "modal modal-open" : "modal"}>
-                        <div className="modal-box bg-white text-black max-w-2xl mx-auto">
+                        <div className="modal-box bg-white text-black max-w-2xl mx-auto border-t-5 border-black">
                           <h3 className="font-bold text-lg">Edit Komentar Anda</h3>
 
                           <form onSubmit={async (e) => {
@@ -227,7 +227,7 @@ export default function PostDetailPage() {
 
                       {/* Delete comment modal */}
                       <div className={deleteComModal ? "modal modal-open" : "modal"}>
-                        <div className="modal-box text-center bg-white text-black">
+                        <div className="modal-box text-center bg-white text-black border-t-5 border-black">
                           <h3 className="font-bold text-lg">Hapus komentar?</h3>
                           <p className="py-4">Apakah Anda yakin ingin menghapus komentar? Operasi ini tidak bisa dibatalkan.</p>
 
@@ -273,7 +273,7 @@ export default function PostDetailPage() {
 
       {/* Delete post modal */}
       <div className={showDeleteModal ? "modal modal-open" : "modal"}>
-        <div className="modal-box text-center bg-white text-black">
+        <div className="modal-box text-center bg-white text-black border-t-5 border-black">
           <h3 className="font-bold text-lg">Hapus post?</h3>
           <p className="py-4">Apakah Anda yakin ingin menghapus post ini? Operasi ini tidak bisa dibatalkan.</p>
 
@@ -293,7 +293,7 @@ export default function PostDetailPage() {
 
       {/* Add comment modal */}
       <div className={addComModal ? "modal modal-open" : "modal"}>
-        <div className="modal-box bg-white text-black max-w-2xl mx-auto">
+        <div className="modal-box bg-white text-black max-w-2xl mx-auto border-t-5 border-black">
           <h3 className="font-bold text-lg">Tambahkan Komentar</h3>
           <p className="py-2 text-sm text-black/70">Tulis komentar Anda untuk post ini.</p>
 
