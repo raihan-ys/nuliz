@@ -46,7 +46,7 @@ class CommentController extends Controller
         return response()->json(['message' => 'Komentar berhasil diperbarui'], 200);
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
         $comment = Comment::findOrFail($id);
 

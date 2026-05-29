@@ -13,6 +13,8 @@ export default function PostDetailPage() {
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [deleting, setDeleting] = useState(false);
   const [deleteError, setDeleteError] = useState(null);
+
+  const [comId, setComId] = useState(null);
   const [addComModal, setAddComModal] = useState(false);
   const [editComModal, setEditComModal] = useState(false);
   const [deleteComModal, setDeleteComModal] = useState(false);
@@ -68,12 +70,12 @@ export default function PostDetailPage() {
   if (!post) return <div className="p-6 text-center text-xl">Tidak ditemukan</div>;
 
   // Handle post deletion
-  async function handleDelete() {
+  async function handlePostDelete() {
     setDeleting(true);
     setDeleteError(null);
 
     try {
-      const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
+      const res = await fetch(`http://localhost:8000/api/posts/${comId}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
@@ -85,6 +87,31 @@ export default function PostDetailPage() {
       router.push("/posts");
       return;
     } catch (e) {
+      setDeleteError(e.message);
+    } finally {
+      setDeleting(false);
+      setShowDeleteModal(false);
+    }
+  }
+
+  // Handle comment deletion
+  async function handleCommentDelete() {
+    setDeleting(true);
+    setDeleteError(null);
+
+    try {
+      const res = await fetch(`http://localhost:8000/api/comments/${comId}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
+      });
+
+      if (!res.ok) {
+        throw new Error(String(res.status));
+      }
+
+      router.push(`/posts/${id}`);
+      return;
+    } catch(e) {
       setDeleteError(e.message);
     } finally {
       setDeleting(false);
@@ -207,12 +234,15 @@ export default function PostDetailPage() {
                           {/* Error message */}
                           {commentError && <div className="text-red-600 mb-2">{commentError}</div>}
 
+                          {/* Buttons */}
                           <div className="modal-action justify-center">
+                            {/* Cancel */}
                             <button className="btn btn-ghost rounded-full border border-black" onClick={() => setDeleteComModal(false)}>
                               Tidak
                             </button>
-                            {/* TODO: Create a function to handle comment deletion */}
-                            <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black">
+                            {/* Approve */}
+                            {/* ERROR: How to set comId? */}
+                            <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" onClick={() => handleCommentDelete()}>
                               {deleting ? "Menghapus..." : "Hapus"}
                             </button>
                           </div>
@@ -225,7 +255,7 @@ export default function PostDetailPage() {
                       </button>
 
                       {/* Delete button */}
-                      <button className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black" onClick={() => setDeleteComModal(true)}>
+                      <button className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black" onClick={() => { setComId(c.id); setDeleteComModal(true); }}>
                         Hapus
                       </button>
                     </>
@@ -254,7 +284,7 @@ export default function PostDetailPage() {
             <button className="btn btn-ghost rounded-full border border-black" onClick={() => setShowDeleteModal(false)}>
               Tidak
             </button>
-            <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" onClick={handleDelete} disabled={deleting}>
+            <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" onClick={handlePostDelete} disabled={deleting}>
               {deleting ? "Menghapus..." : "Hapus"}
             </button>
           </div>
@@ -289,7 +319,7 @@ export default function PostDetailPage() {
               if (!pres.ok) throw new Error(String(pres.status));
               const pdata = await pres.json();
               setPost(pdata);
-              addComText("");
+              setAddComText("");
               setAddComModal(false);
             } catch (err) {
               setCommentError(err.message);
