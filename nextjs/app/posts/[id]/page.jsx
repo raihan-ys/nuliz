@@ -95,6 +95,7 @@ export default function PostDetailPage() {
   }
 
   // Handle comment deletion
+  //ERROR: post does not refresh after deleting a comment
   async function handleCommentDelete() {
     setDeleting(true);
     setDeleteError(null);
@@ -105,12 +106,18 @@ export default function PostDetailPage() {
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });
 
-      if (!res.ok) {
-        throw new Error(String(res.status));
-      }
+      if (!res.ok) throw new Error(String(res.status));
 
-      router.push(`/posts/${id}`);
-      return;
+      // Refresh post
+      const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { 
+        headers: { Authorization: `Bearer ${token}` } 
+      });
+      
+      if (!pres.ok) throw new Error(String(pres.status));
+
+      const pdata = await pres.json();
+      setPost(pdata);
+      setDeleteComModal(false);
     } catch(e) {
       setDeleteError(e.message);
     } finally {
@@ -333,7 +340,7 @@ export default function PostDetailPage() {
             </div>
 
             <div className="flex items-center justify-center gap-4">
-              <button type="submit" className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" disabled={postingComment}>{postingComment ? 'Mengirim...' : 'Kirim'}</button>
+              <button type="submit" className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" disabled={postingComment}>{postingComment ? 'Menambah...' : 'Tambah'}</button>
               <button type="button" className="btn btn-ghost rounded-full" onClick={() => setAddComModal(false)}>Batal</button>
             </div>
           </form>
