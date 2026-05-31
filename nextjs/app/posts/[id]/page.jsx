@@ -94,8 +94,39 @@ export default function PostDetailPage() {
     }
   }
 
+  // Handle comment addition
+  async function handleCommentAdd (e){
+    e.preventDefault();
+    setPostingComment(true);
+    setCommentError(null);
+    try {
+      const postId = id;
+      const cres = await fetch(`http://localhost:8000/api/comments/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ content: addComText, post_id: postId }),
+      });
+
+      if (!cres.ok) throw new Error(String(cres.status));
+
+      // Refresh post
+      const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      if (!pres.ok) throw new Error(String(pres.status));
+      const pdata = await pres.json();
+      setPost(pdata);
+      setAddComText("");
+      setAddComModal(false);
+    } catch (err) {
+      setCommentError(err.message);
+    } finally {
+      setPostingComment(false);
+    }
+  }
+
+  // Handle comment update
+
+
   // Handle comment deletion
-  //ERROR: post does not refresh after deleting a comment
   async function handleCommentDelete() {
     setDeleting(true);
     setDeleteError(null);
@@ -137,7 +168,7 @@ export default function PostDetailPage() {
             <div>
               <h1 className="text-3xl font-bold">{post.title}</h1>
               <div className="mt-2 text-sm text-black/70">
-                Oleh {post.writer.name ?  post.writer.name : "Anonim"} - {new Date(post.created_at).toLocaleString()}
+                Oleh {post.writer ?  post.writer : "Anonim"} - {new Date(post.created_at).toLocaleString()}
               </div>
             </div>
 
@@ -248,7 +279,6 @@ export default function PostDetailPage() {
                               Tidak
                             </button>
                             {/* Approve */}
-                            {/* ERROR: How to set comId? */}
                             <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" onClick={() => handleCommentDelete()}>
                               {deleting ? "Menghapus..." : "Hapus"}
                             </button>
@@ -305,35 +335,8 @@ export default function PostDetailPage() {
           <p className="py-2 text-sm text-black/70">Tulis komentar Anda untuk post ini.</p>
 
           {commentError && <div className="text-red-600 mb-2">{commentError}</div>}
-
-          <form onSubmit={async (e) => {
-            e.preventDefault();
-            setPostingComment(true);
-            setCommentError(null);
-            try {
-              const postId = id;
-
-              const cres = await fetch(`http://localhost:8000/api/comments/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                body: JSON.stringify({ content: addComText, post_id: postId }),
-              });
-
-              if (!cres.ok) throw new Error(String(cres.status));
-
-              // Refresh post
-              const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
-              if (!pres.ok) throw new Error(String(pres.status));
-              const pdata = await pres.json();
-              setPost(pdata);
-              setAddComText("");
-              setAddComModal(false);
-            } catch (err) {
-              setCommentError(err.message);
-            } finally {
-              setPostingComment(false);
-            }
-          }} className="space-y-4 mt-4">
+          
+          <form onSubmit={(e) => handleCommentAdd(e)} className="space-y-4 mt-4">
             <div>
               <label className="label"><span className="label-text">Komen...</span></label>
               <textarea required value={addComText} onChange={(e) => setAddComText(e.target.value)} className="textarea textarea-bordered w-full bg-white border border-black text-black h-32" />

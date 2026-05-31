@@ -6,7 +6,6 @@ import Image from "next/image";
 
 export default function CreatePostPage() {
   const router = useRouter();
-  const [createdBy, setCreatedBy] = useState(null);
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [loading, setLoading] = useState(false);
@@ -16,27 +15,11 @@ export default function CreatePostPage() {
     // Get client's token
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
    
-    // If no token, redirect to login immediately
+    // If no token, redirect to login
     if (!token) {
       router.replace('/login');
       return;
     }
-
-    (async () => {
-      try {
-        const res = await fetch('http://localhost:8000/api/user', {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        if (!res.ok) throw new Error(String(res.status));
-
-        // Get current user's ID
-        const u = await res.json();
-        setCreatedBy(u.id);
-      } catch (e) {
-        // If user can't be retrieved, force login
-        router.replace('/login');
-      }
-    })();
   }, [router]);
 
   async function handleSubmit(e) {
@@ -69,7 +52,7 @@ export default function CreatePostPage() {
       <div className="w-full max-w-2xl p-8">
         <header className="mb-6 flex flex-col items-center">
           <Image src="/images/writingPoster.png" alt="create post banner" width={120} height={80} />
-          <h1 className="mt-4 text-2xl font-bold">Buat Post Baru</h1>
+          <h1 className="mt-4 text-2xl font-bold">Postingan Baru</h1>
         </header>
 
         <form onSubmit={handleSubmit} className="space-y-4">
