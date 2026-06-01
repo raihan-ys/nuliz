@@ -95,7 +95,7 @@ export default function PostDetailPage() {
   }
 
   // Handle comment addition
-  async function handleCommentAdd (e){
+  async function handleCommentAdd(e) {
     e.preventDefault();
     setPostingComment(true);
     setCommentError(null);
@@ -124,7 +124,34 @@ export default function PostDetailPage() {
   }
 
   // Handle comment update
+  async function handleCommentEdit(e) {
+    e.preventDefault();
+    setPostingComment(true);
+    setCommentError(null);
+    try {
+      const cres = await fetch(`http://localhost:8000/api/comments/${comId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
+        body: JSON.stringify({ content: editComText }),
+      });
 
+      if (!cres.ok) throw new Error(String(cres.status));
+
+      // Refresh current post
+      const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
+      
+      if (!pres.ok) throw new Error(String(pres.status));
+      
+      const pdata = await pres.json();
+      setPost(pdata);
+      setEditComText("");
+      setEditComModal(false);
+    } catch (e) {
+      setCommentError(e.message);
+    } finally {
+      setPostingComment(false);
+    }
+  }
 
   // Handle comment deletion
   async function handleCommentDelete() {
@@ -182,9 +209,11 @@ export default function PostDetailPage() {
               
               {(post.created_by === currentUserId ) && (
                 <>
+                  {/* Update */}
                   <Link href={`/posts/${id}/edit`} className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white">
                     Edit
                   </Link>
+                  {/* Delete */}
                   <button className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black" onClick={() => setShowDeleteModal(true)}
                   >
                     Hapus
@@ -215,79 +244,8 @@ export default function PostDetailPage() {
                     {/* If current user was the comment's writer */}
                     { (c.user.id === currentUserId) && (
                     <>
-                    
-                      {/* Edit comment modal */}
-                      <div className={editComModal ? "modal modal-open" : "modal"}>
-                        <div className="modal-box bg-white text-black max-w-2xl mx-auto border-t-5 border-black">
-                          <h3 className="font-bold text-lg">Edit Komentar Anda</h3>
-
-                          <form onSubmit={async (e) => {
-                            e.preventDefault();
-                            setPostingComment(true);
-                            setCommentError(null);
-                            try {
-                              const cres = await fetch(`http://localhost:8000/api/comments/${c.id}`, {
-                                method: 'PUT',
-                                headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
-                                body: JSON.stringify({ content: editComText }),
-                              });
-
-                              if (!cres.ok) throw new Error(String(cres.status));
-
-                              // Refresh current post
-                              const pres = await fetch(`http://localhost:8000/api/posts/${id}`, { headers: { Authorization: `Bearer ${token}` } });
-                              if (!pres.ok) throw new Error(String(pres.status));
-                              const pdata = await pres.json();
-                              setPost(pdata);
-                              setEditComText("");
-                              setEditComModal(false);
-                            } catch (e) {
-                              setCommentError(e.message);
-                            } finally {
-                              setPostingComment(false);
-                            }
-                          }} className="space-y-4 mt-4">
-                            <div>
-                              <label className="label"><span className="label-text">Komen...</span></label>
-                              
-                              <textarea required value={editComText} onChange={(e) => setEditComText(e.target.value)} className="textarea textarea-bordered w-full bg-white border border-black text-black h-32" />
-                            </div>
-
-                            <div className="flex items-center justify-center gap-4">
-                              {/* Submit */}
-                              <button type="submit" className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" disabled={postingComment}>{postingComment ? 'Mengubah...' : 'Ubah'}</button>
-                              {/* Cancel */}
-                              <button type="button" onClick={() => setEditComModal(false)} className="btn btn-ghost rounded-full">Batal</button>
-                            </div>
-                          </form>
-                        </div>
-                      </div>
-
-                      {/* Delete comment modal */}
-                      <div className={deleteComModal ? "modal modal-open" : "modal"}>
-                        <div className="modal-box text-center bg-white text-black border-t-5 border-black">
-                          <h3 className="font-bold text-lg">Hapus komentar?</h3>
-                          <p className="py-4">Apakah Anda yakin ingin menghapus komentar? Operasi ini tidak bisa dibatalkan.</p>
-
-                          {/* Error message */}
-                          {commentError && <div className="text-red-600 mb-2">{commentError}</div>}
-
-                          {/* Buttons */}
-                          <div className="modal-action justify-center">
-                            {/* Cancel */}
-                            <button className="btn btn-ghost rounded-full border border-black" onClick={() => setDeleteComModal(false)}>
-                              Tidak
-                            </button>
-                            {/* Approve */}
-                            <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" onClick={() => handleCommentDelete()}>
-                              {deleting ? "Menghapus..." : "Hapus"}
-                            </button>
-                          </div>
-                        </div>
-                      </div>
-
                       {/* Edit button */}
-                      <button className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white" onClick={() => { setEditComText(c.content); setEditComModal(true); }}>
+                      <button className="btn btn-ghost rounded-full border border-black text-black hover:bg-black hover:text-white" onClick={() => { setComId(c.id); setEditComText(c.content); setEditComModal(true); }}>
                         Edit
                       </button>
 
@@ -297,7 +255,6 @@ export default function PostDetailPage() {
                       </button>
                     </>
                     )}
-
                   </div>
                   <div className="text-xs text-black/70 mb-3">{new Date(c.created_at).toLocaleString()}</div>
                   <div className="mt-2 text-sm text-black/80">{c.content}</div>
@@ -347,6 +304,51 @@ export default function PostDetailPage() {
               <button type="button" className="btn btn-ghost rounded-full" onClick={() => setAddComModal(false)}>Batal</button>
             </div>
           </form>
+        </div>
+      </div>
+
+      {/* Edit comment modal */}
+      <div className={editComModal ? "modal modal-open" : "modal"}>
+        <div className="modal-box bg-white text-black max-w-2xl mx-auto border-t-5 border-black">
+          <h3 className="font-bold text-lg">Edit Komentar Anda</h3>
+
+          <form onSubmit={ (e) => handleCommentEdit(e) } className="space-y-4 mt-4">
+            <div>
+              <label className="label"><span className="label-text">Komen...</span></label>
+              
+              <textarea required value={editComText} onChange={(e) => setEditComText(e.target.value)} className="textarea textarea-bordered w-full bg-white border border-black text-black h-32" />
+            </div>
+
+            <div className="flex items-center justify-center gap-4">
+              {/* Submit */}
+              <button type="submit" className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" disabled={postingComment}>{postingComment ? 'Mengubah...' : 'Ubah'}</button>
+              {/* Cancel */}
+              <button type="button" onClick={() => setEditComModal(false)} className="btn btn-ghost rounded-full">Batal</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      {/* Delete comment modal */}
+      <div className={deleteComModal ? "modal modal-open" : "modal"}>
+        <div className="modal-box text-center bg-white text-black border-t-5 border-black">
+          <h3 className="font-bold text-lg">Hapus komentar?</h3>
+          <p className="py-4">Apakah Anda yakin ingin menghapus komentar? Operasi ini tidak bisa dibatalkan.</p>
+
+          {/* Error message */}
+          {commentError && <div className="text-red-600 mb-2">{commentError}</div>}
+
+          {/* Buttons */}
+          <div className="modal-action justify-center">
+            {/* Cancel */}
+            <button className="btn btn-ghost rounded-full border border-black" onClick={() => setDeleteComModal(false)}>
+              Tidak
+            </button>
+            {/* Approve */}
+            <button className="btn rounded-full bg-black text-white hover:bg-white hover:text-black" onClick={() => handleCommentDelete()}>
+              {deleting ? "Menghapus..." : "Hapus"}
+            </button>
+          </div>
         </div>
       </div>
     </div>
