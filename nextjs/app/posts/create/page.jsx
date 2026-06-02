@@ -1,5 +1,9 @@
 "use client";
 
+import { ClassicEditor, Essentials, Paragraph, Bold, Italic } from 'ckeditor5';
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import 'ckeditor5/ckeditor5.css';
+
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -70,17 +74,20 @@ export default function CreatePostPage() {
             />
           </div>
 
-          {/* Use ckeditor 5 features */}
           <div>
             <label className="label">
               <span className="label-text">Konten</span>
             </label>
-            <textarea
+            <CKEditor
+              editor={ ClassicEditor }
               required
               value={content}
               onChange={(e) => setContent(e.target.value)}
-              className="textarea textarea-bordered w-full bg-white text-black h-48"
-              placeholder="Tulis ceritamu di sini..."
+              config={{
+                licenseKey: '<YOUR_LICENSE_KEY>',
+                plugins: [ Essentials, Paragraph, Bold, Italic ],
+                toolbar: [ 'undo', 'redo', '|', 'bold', 'italic' ],
+              }}
             />
           </div>
 
