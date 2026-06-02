@@ -11,10 +11,10 @@ export default function CreatePostPage() {
   const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState(null);
 
+  // Get client's token
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
   useEffect(() => {
-    // Get client's token
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-   
     // If no token, redirect to login
     if (!token) {
       router.replace('/login');
@@ -22,13 +22,13 @@ export default function CreatePostPage() {
     }
   }, [router]);
 
+  // Handle post submission
   async function handleSubmit(e) {
     e.preventDefault();
     setLoading(true);
     setMessage(null);
 
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       const res = await fetch('http://localhost:8000/api/posts', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', Authorization: `Bearer ${token}` },
@@ -37,6 +37,7 @@ export default function CreatePostPage() {
 
       if (!res.ok) throw new Error(String(res.status));
 
+      // Redirect to submitted post details' page
       const data = await res.json();
       setMessage({ type: 'success', text: 'Tulisan selesai!' });
       router.push(`/posts/${data.id}`);
@@ -69,6 +70,7 @@ export default function CreatePostPage() {
             />
           </div>
 
+          {/* Use ckeditor 5 features */}
           <div>
             <label className="label">
               <span className="label-text">Konten</span>

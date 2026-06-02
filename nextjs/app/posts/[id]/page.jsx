@@ -75,7 +75,7 @@ export default function PostDetailPage() {
     setDeleteError(null);
 
     try {
-      const res = await fetch(`http://localhost:8000/api/posts/${comId}`, {
+      const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
         method: "DELETE",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       });

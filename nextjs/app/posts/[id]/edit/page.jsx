@@ -85,7 +85,7 @@ export default function EditPostPage() {
     }
   }
 
-  if (loading) return <div className="p-6">Memuat...</div>;
+  if (loading) return <div className="p-6 text-center text-xl">Memuat...</div>;
 
   return (
     <div className="min-h-screen bg-white text-black font-sans flex items-center justify-center">
