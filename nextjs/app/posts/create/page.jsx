@@ -16,9 +16,9 @@ export default function CreatePostPage() {
 
   // Get client's token
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-
-  // CKEditor Liscense Key
-  const LICENSE_KEY = 'eyJhbGciOiJFUzI1NiJ9.eyJleHAiOjE3Nzk2NjcxOTksImp0aSI6IjhmYmY2NmViLTA4OTMtNGI3Mi04Yzk0LTU3MzMyMWY2Mzk5OCIsImxpY2Vuc2VkSG9zdHMiOlsiMTI3LjAuMC4xIiwibG9jYWxob3N0IiwiMTkyLjE2OC4qLioiLCIxMC4qLiouKiIsIjE3Mi4qLiouKiIsIioudGVzdCIsIioubG9jYWxob3N0IiwiKi5sb2NhbCJdLCJ1c2FnZUVuZHBvaW50IjoiaHR0cHM6Ly9wcm94eS1ldmVudC5ja2VkaXRvci5jb20iLCJkaXN0cmlidXRpb25DaGFubmVsIjpbImNsb3VkIiwiZHJ1cGFsIl0sImxpY2Vuc2VUeXBlIjoiZGV2ZWxvcG1lbnQiLCJmZWF0dXJlcyI6WyJEUlVQIiwiRTJQIiwiRTJXIl0sInZjIjoiNWNhZDJlODQifQ.eRDOeGJD1y60LUotnVU98WEQESch4KmexAmdnRNtASQgnLbAKsTt9SccSwJprMgOo7KqLjydVUPwhg2ujGHRHA';
+ 
+  // CKEditor liscense key
+  const LICENSE_KEY = 'GPL';
 
   useEffect(() => {
     // If no token, redirect to login
@@ -39,239 +39,20 @@ export default function CreatePostPage() {
 			return {};
 		}
 
-		const {
-			ClassicEditor,
-			Alignment,
-			AutoImage,
-			Autoformat,
-			Autosave,
-			ImageBlock,
-			BlockQuote,
-			Bold,
-			CloudServices,
-			Code,
-			CodeBlock,
-			Emoji,
-			Essentials,
-			FontBackgroundColor,
-			FontColor,
-			FontFamily,
-			FontSize,
-			Fullscreen,
-			GeneralHtmlSupport,
-			Heading,
-			Highlight,
-			HorizontalLine,
-			HtmlComment,
-			ImageCaption,
-			ImageEditing,
-			ImageInsertViaUrl,
-			ImageStyle,
-			ImageTextAlternative,
-			ImageToolbar,
-			ImageUpload,
-			ImageUtils,
-			ImageInline,
-			Indent,
-			IndentBlock,
-			Italic,
-			Link,
-			LinkImage,
-			List,
-			Mention,
-			Paragraph,
-			ShowBlocks,
-			SourceEditing,
-			Strikethrough,
-			Style,
-			Subscript,
-			Superscript,
-			Table,
-			TableCaption,
-			TableToolbar,
-			TextTransformation,
-			TodoList,
-			Underline
-		} = cloud.CKEditor;
+		const { ClassicEditor, Autosave, Essentials, Paragraph, Bold, Italic, Link, AutoLink } = cloud.CKEditor;
 
 		return {
 			ClassicEditor,
 			editorConfig: {
 				root: {
-					placeholder: 'Tulis ceritamu disini...',
+					placeholder: 'Type or paste your content here!'
 				},
 				toolbar: {
-					items: [
-						'undo',
-						'redo',
-						'|',
-						'sourceEditing',
-						'showBlocks',
-						'fullscreen',
-						'|',
-						'heading',
-						'style',
-						'|',
-						'fontSize',
-						'fontFamily',
-						'fontColor',
-						'fontBackgroundColor',
-						'|',
-						'bold',
-						'italic',
-						'underline',
-						'strikethrough',
-						'subscript',
-						'superscript',
-						'code',
-						'|',
-						'emoji',
-						'horizontalLine',
-						'link',
-						'insertTable',
-						'highlight',
-						'blockQuote',
-						'codeBlock',
-						'|',
-						'alignment',
-						'|',
-						'bulletedList',
-						'numberedList',
-						'todoList',
-						'outdent',
-						'indent'
-					],
+					items: ['undo', 'redo', '|', 'bold', 'italic', '|', 'link'],
 					shouldNotGroupWhenFull: false
 				},
-				plugins: [
-					Alignment,
-					Autoformat,
-					AutoImage,
-					Autosave,
-					BlockQuote,
-					Bold,
-					CloudServices,
-					Code,
-					CodeBlock,
-					Emoji,
-					Essentials,
-					FontBackgroundColor,
-					FontColor,
-					FontFamily,
-					FontSize,
-					Fullscreen,
-					GeneralHtmlSupport,
-					Heading,
-					Highlight,
-					HorizontalLine,
-					HtmlComment,
-					ImageBlock,
-					ImageCaption,
-					ImageEditing,
-					ImageInline,
-					ImageInsertViaUrl,
-					ImageStyle,
-					ImageTextAlternative,
-					ImageToolbar,
-					ImageUpload,
-					ImageUtils,
-					Indent,
-					IndentBlock,
-					Italic,
-					Link,
-					LinkImage,
-					List,
-					Mention,
-					Paragraph,
-					ShowBlocks,
-					SourceEditing,
-					Strikethrough,
-					Style,
-					Subscript,
-					Superscript,
-					Table,
-					TableCaption,
-					TableToolbar,
-					TextTransformation,
-					TodoList,
-					Underline
-				],
+				plugins: [AutoLink, Autosave, Bold, Essentials, Italic, Link, Paragraph],
 				licenseKey: LICENSE_KEY,
-				fontFamily: {
-					supportAllValues: true
-				},
-				fontSize: {
-					options: [10, 12, 14, 'default', 18, 20, 22],
-					supportAllValues: true
-				},
-				fullscreen: {
-					onEnterCallback: container =>
-						container.classList.add(
-							'editor-container',
-							'editor-container_classic-editor',
-							'editor-container_include-style',
-							'editor-container_include-fullscreen',
-							'main-container'
-						)
-				},
-				heading: {
-					options: [
-						{
-							model: 'paragraph',
-							title: 'Paragraph',
-							class: 'ck-heading_paragraph'
-						},
-						{
-							model: 'heading1',
-							view: 'h1',
-							title: 'Heading 1',
-							class: 'ck-heading_heading1'
-						},
-						{
-							model: 'heading2',
-							view: 'h2',
-							title: 'Heading 2',
-							class: 'ck-heading_heading2'
-						},
-						{
-							model: 'heading3',
-							view: 'h3',
-							title: 'Heading 3',
-							class: 'ck-heading_heading3'
-						},
-						{
-							model: 'heading4',
-							view: 'h4',
-							title: 'Heading 4',
-							class: 'ck-heading_heading4'
-						},
-						{
-							model: 'heading5',
-							view: 'h5',
-							title: 'Heading 5',
-							class: 'ck-heading_heading5'
-						},
-						{
-							model: 'heading6',
-							view: 'h6',
-							title: 'Heading 6',
-							class: 'ck-heading_heading6'
-						}
-					]
-				},
-				htmlSupport: {
-					allow: [
-						{
-							name: /^.*$/,
-							styles: true,
-							attributes: true,
-							classes: true
-						}
-					]
-				},
-				image: {
-					toolbar: ['toggleImageCaption', 'imageTextAlternative', '|', 'imageStyle:inline', 'imageStyle:wrapText', 'imageStyle:breakText']
-				},
 				link: {
 					addTargetToExternalLinks: true,
 					defaultProtocol: 'https://',
@@ -284,63 +65,6 @@ export default function CreatePostPage() {
 							}
 						}
 					}
-				},
-				mention: {
-					feeds: [
-						{
-							marker: '@',
-							feed: [
-								/* See: https://ckeditor.com/docs/ckeditor5/latest/features/mentions.html */
-							]
-						}
-					]
-				},
-				style: {
-					definitions: [
-						{
-							name: 'Article category',
-							element: 'h3',
-							classes: ['category']
-						},
-						{
-							name: 'Title',
-							element: 'h2',
-							classes: ['document-title']
-						},
-						{
-							name: 'Subtitle',
-							element: 'h3',
-							classes: ['document-subtitle']
-						},
-						{
-							name: 'Info box',
-							element: 'p',
-							classes: ['info-box']
-						},
-						{
-							name: 'CTA Link Primary',
-							element: 'a',
-							classes: ['button', 'button--green']
-						},
-						{
-							name: 'CTA Link Secondary',
-							element: 'a',
-							classes: ['button', 'button--black']
-						},
-						{
-							name: 'Marker',
-							element: 'span',
-							classes: ['marker']
-						},
-						{
-							name: 'Spoiler',
-							element: 'span',
-							classes: ['spoiler']
-						}
-					]
-				},
-				table: {
-					contentToolbar: ['tableColumn', 'tableRow', 'mergeTableCells']
 				}
 			}
 		};
