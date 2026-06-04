@@ -1,50 +1,55 @@
 "use client";
 
-import { useEffect, useState } from "react";
-import { useParams, useRouter } from "next/navigation";
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 import { ClassicEditor, Essentials, Paragraph, Bold, Italic, Link } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
+import { useEffect, useState } from "react";
+import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
 
 export default function EditPostPage() {
-  const { id } = useParams();
+  const {id} = useParams();
   const router = useRouter();
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [createdBy, setCreatedBy] = useState(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState(null);
+
+  // Get client's token
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
   useEffect(() => {
     if (!id) return;
 
     async function load() {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       if (!token) {
         router.replace('/login');
         return;
       }
 
       try {
+        // Get post details
         const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (!res.ok) throw new Error(String(res.status));
+
         const data = await res.json();
         setTitle(data.title || "");
         setContent(data.content || "");
-        setCreatedBy(data.created_by ?? data.created_by);
 
         try {
+          // Get current user details to verify ownership
           const ures = await fetch('http://localhost:8000/api/user', { headers: { Authorization: `Bearer ${token}` } });
           if (!ures.ok) throw new Error(String(ures.status));
           const udata = await ures.json();
           const currentUserId = udata.id;
-          const ownerId = data.created_by ?? data.user?.id;
-          if (ownerId !== currentUserId) {
+
+          // Redirect to post details' page if current user is not the owner
+          if (data.user.id !== currentUserId) {
             router.replace(`/posts/${id}`);
             return;
           }
@@ -68,7 +73,6 @@ export default function EditPostPage() {
     setMessage(null);
 
     try {
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
       const res = await fetch(`http://localhost:8000/api/posts/${id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
@@ -106,15 +110,18 @@ export default function EditPostPage() {
 
           <div>
             <label className="label"><span className="label-text">Konten</span></label>
-            {/*<textarea required value={content} onChange={(e) => setContent(e.target.value)} className="textarea textarea-bordered w-full bg-white text-black h-48" />*/}
             <CKEditor
               required
-              value={content}
+              placeholder="Tulis ceritamu di sini..."
+              initialData={content}
               editor={ClassicEditor}
+              onChange={(event, editor) => setContent(editor.getData())}
+              data={content}
               config={{
                 licenseKey: 'GPL',
                 plugins: [Essentials, Paragraph, Bold, Italic, Link],
-                toolbar: ['undo', 'redo', '|', 'bold', 'italic', '|', 'link']
+                toolbar: ['undo', 'redo', '|', 'bold', 'italic', '|', 'link'],
+                placeholder: 'Tulis ceritamu di sini...'
               }}
        			/>
           </div>

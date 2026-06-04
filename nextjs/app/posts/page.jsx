@@ -15,8 +15,9 @@ export default function PostsPage() {
 
   useEffect(() => {
     async function load(page = 1) {
-      // require token
+      // Get client's token
       const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+      
       if (!token) {
         router.replace('/login');
         return;
@@ -105,7 +106,7 @@ export default function PostsPage() {
               <div className="text-black/70">Belum ada post.</div>
             ) : (
               posts.map((post) => (
-                <article key={post.id} className="border border-black p-6">
+                <article key={post.id} className="rounded border border-t-5 border-black p-6">
                   <div className="flex items-start gap-4">
                     <div className="flex-1">
                       <h2 className="text-xl font-semibold">

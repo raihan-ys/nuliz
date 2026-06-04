@@ -236,7 +236,7 @@ export default function PostDetailPage() {
 
               {/* Comments */}
               {post.comments.map((c) => (
-                <div key={c.id} className="border border-black p-4">
+                <div key={c.id} className="rounded border border-black p-4">
                   <div className="text-sm font-semibold flex items-center gap-3">
                     {/* Writer */}
                     <span className="mr-auto">{c.user.name ?? "Anonim"}</span>

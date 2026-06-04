@@ -65,7 +65,7 @@ export default function Home() {
          <section id="posts" className="mt-20">
           <h2 className="text-2xl font-bold">Contoh Postingan</h2>
           <div className="mt-6 grid gap-6 sm:grid-cols-2">
-            <article className="border border-black p-6">
+            <article className="rounded border border-black p-6">
               <h2 className="text-lg font-semibold">Judul Post Pertama</h2>
               <div className="mt-2 text-sm text-black/70">
                 Oleh John Doe • 0 komentar - Dibuat pada 1 Januari 2024
@@ -73,7 +73,7 @@ export default function Home() {
               <p className="mt-4 text-black/80">Ini adalah cuplikan singkat dari postingan pertama.</p>
             </article>
 
-            <article className="border border-black p-6">
+            <article className="rounded border border-black p-6">
               <h2 className="text-lg font-semibold">Judul Post Kedua</h2>
               <div className="mt-2 text-sm text-black/70">
                 Oleh Jane Smith • 0 komentar - Dibuat pada 2 Januari 2024
