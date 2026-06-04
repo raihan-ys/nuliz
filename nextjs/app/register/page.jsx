@@ -20,6 +20,7 @@ export default function RegisterPage() {
         setMessage(null);
 
         try {
+            // Store user's data
             const res = await fetch("http://localhost:8000/api/register", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -30,18 +31,17 @@ export default function RegisterPage() {
                     password_confirmation: passwordConfirm,
                 }),
             });
-
-            const data = await res.json().catch(() => ({}));
-
             if (!res.ok) throw new Error(String(res.status));
-
+            
+            // Get token from response
+            const data = await res.json().catch(() => ({}));
             setMessage({ type: "success", text: "Akun berhasil dibuat!" });
 
-            // Store user's token in local storage
+            // Store user's token in local storage and redirect to posts page
             try { localStorage.setItem('token', data.access_token); } catch (e) {}
             router.push('/posts');
-        } catch (err) {
-            setMessage({ type: "error", text: err.message });
+        } catch (e) {
+            setMessage({ type: "error", text: e.message });
         } finally {
             setLoading(false);
         }
@@ -51,7 +51,7 @@ export default function RegisterPage() {
         <div className="min-h-screen bg-white text-black font-sans flex items-center justify-center">
             <div className="w-full max-w-md p-8">
                 <Link className="mb-8 flex flex-col items-center" href="/">
-                    <Image src="/images/appLogo.png" alt="Nuliz logo" width={72} height={72} />
+                    <Image src="/images/appLogo.png" alt="Nuliz Logo" width={72} height={72} />
                     <h1 className="mt-4 text-2xl font-bold">Daftar ke Nuliz</h1>
                     <p className="text-sm text-black/70">Mulai nulis dan bagikan kisahmu.</p>
                 </Link>

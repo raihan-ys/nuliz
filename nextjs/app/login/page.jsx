@@ -18,26 +18,25 @@ export default function LoginPage() {
     setMessage(null);
 
     try {
+      // User authentication
       const res = await fetch("http://localhost:8000/api/login", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password }),
       });
+      if (!res.ok) throw new Error(String(res.status));
 
       const data = await res.json().catch(() => ({}));
-      if (!res.ok) throw new Error(String(res.status));
 
       setMessage({ type: "success", text: "Login berhasil!" });
       
       // Store token for protected API calls
-      try { 
-        localStorage.setItem('token', data.access_token); 
-      } catch (e) {}
+      try { localStorage.setItem('token', data.access_token); } catch (e) {}
 
-      // Redirect to posts page after successful login
+      // Redirect to posts page
       router.push('/posts');
-    } catch (err) {
-      setMessage({ type: "error", text: err.message });
+    } catch (e) {
+      setMessage({ type: "error", text: e.message });
     } finally {
       setLoading(false);
     }
