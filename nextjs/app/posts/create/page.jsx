@@ -83,6 +83,7 @@ export default function CreatePostPage() {
 					/>*/}
 					<CKEditor
 						required
+						placeholder="Tulis ceritamu di sini..."
 						value={content}
 						editor={ClassicEditor}
 						config={{

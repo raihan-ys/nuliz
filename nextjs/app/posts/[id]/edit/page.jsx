@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
+import { CKEditor } from '@ckeditor/ckeditor5-react';
+import { ClassicEditor, Essentials, Paragraph, Bold, Italic, Link } from 'ckeditor5';
+import 'ckeditor5/ckeditor5.css';
 import Image from "next/image";
 
 export default function EditPostPage() {
@@ -103,12 +106,23 @@ export default function EditPostPage() {
 
           <div>
             <label className="label"><span className="label-text">Konten</span></label>
-            <textarea required value={content} onChange={(e) => setContent(e.target.value)} className="textarea textarea-bordered w-full bg-white text-black h-48" />
+            {/*<textarea required value={content} onChange={(e) => setContent(e.target.value)} className="textarea textarea-bordered w-full bg-white text-black h-48" />*/}
+            <CKEditor
+              required
+              value={content}
+              editor={ClassicEditor}
+              config={{
+                licenseKey: 'GPL',
+                plugins: [Essentials, Paragraph, Bold, Italic, Link],
+                toolbar: ['undo', 'redo', '|', 'bold', 'italic', '|', 'link']
+              }}
+       			/>
           </div>
 
           <div className="flex items-center justify-between">
             <button type="submit" className="btn rounded-full bg-black text-white px-6 py-2 hover:bg-white hover:text-black" disabled={saving}>{saving ? "Menyimpan..." : "Simpan"}</button>
             <button type="button" className="btn btn-ghost rounded-full" onClick={() => router.back()}>Batal</button>
+
           </div>
         </form>
 
