@@ -224,7 +224,7 @@ export default function PostDetailPage() {
           </header>
 
           <section className="mb-8">
-            <div className="text-black/90 whitespace-pre-wrap">{post.content}</div>
+            <div className="text-black/90 whitespace-pre-wrap" dangerouslySetInnerHTML={{ __html: post.content }} />
           </section>
 
           <section>

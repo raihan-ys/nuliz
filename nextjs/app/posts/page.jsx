@@ -117,7 +117,7 @@ export default function PostsPage() {
                       <div className="mt-2 text-sm text-black/70">
                         Oleh {post.writer?.name ?? post.writer ?? "Unknown"} • {post.comments_count ?? 0} komentar - Dibuat pada {new Date(post.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
                       </div>
-                      <p className="mt-4 text-black/80">{truncate(post.content, 200)}</p>
+                      <p className="mt-4 text-black/80" dangerouslySetInnerHTML={{ __html: truncate(post.content, 200) }} />
                     </div>
                   </div>
                 </article>
