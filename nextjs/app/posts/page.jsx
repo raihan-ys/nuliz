@@ -105,9 +105,12 @@ export default function PostsPage() {
             {posts.length === 0 && !loading ? (
               <div className="text-black/70">Belum ada post.</div>
             ) : (
-              posts.map((post) => (
-                <article key={post.id} className="rounded border border-t-5 border-black p-6">
-                  <div className="flex items-start gap-4">
+              posts.map((post, i) => (
+                <article key={post.id} className="rounded border">
+                  <div className="bg-black text-white p-3">
+                    <span className="font-bold"># {i + 1}</span>
+                  </div>
+                  <div className="flex items-start gap-4 p-6">
                     <div className="flex-1">
                       <h2 className="text-xl font-semibold">
                         <Link href={`/posts/${post.id}`} className="hover:underline">
