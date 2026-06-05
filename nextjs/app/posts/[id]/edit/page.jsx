@@ -1,7 +1,7 @@
 "use client";
 
 import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { ClassicEditor, Essentials, Paragraph, Bold, Italic, Link } from 'ckeditor5';
+import { ClassicEditor, Essentials, Paragraph, Bold, Italic, Link, Fullscreen } from 'ckeditor5';
 import 'ckeditor5/ckeditor5.css';
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
@@ -119,8 +119,8 @@ export default function EditPostPage() {
               data={content}
               config={{
                 licenseKey: 'GPL',
-                plugins: [Essentials, Paragraph, Bold, Italic, Link],
-                toolbar: ['undo', 'redo', '|', 'bold', 'italic', '|', 'link'],
+                plugins: [Essentials, Paragraph, Bold, Italic, Link, Fullscreen],
+                toolbar: ['undo', 'redo', '|', 'bold', 'italic', '|', 'link', '|', 'fullscreen'],
                 placeholder: 'Tulis ceritamu di sini...'
               }}
        			/>
