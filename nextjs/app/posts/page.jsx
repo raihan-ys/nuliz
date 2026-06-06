@@ -10,7 +10,6 @@ export default function PostsPage() {
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const [lastPage, setLastPage] = useState(1);
-  const [total, setTotal] = useState(0);
   const router = useRouter();
 
   useEffect(() => {
@@ -27,19 +26,19 @@ export default function PostsPage() {
         const res = await fetch(`http://localhost:8000/api/posts?page=${page}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
+
         if (!res.ok) throw new Error(String(res.status));
+        
         const data = await res.json();
         const list = data.data ?? data;
         setPosts(list);
-        // set pagination meta when using Laravel paginator
+        // Set pagination when using Laravel pagination
         if (data.current_page !== undefined) {
           setCurrentPage(data.current_page);
           setLastPage(data.last_page);
-          setTotal(data.total);
         } else if (data.meta) {
           setCurrentPage(data.meta.current_page);
           setLastPage(data.meta.last_page);
-          setTotal(data.meta.total);
         }
       } catch (err) {
         setError(err.message);
@@ -72,7 +71,6 @@ export default function PostsPage() {
       if (data.current_page !== undefined) {
         setCurrentPage(data.current_page);
         setLastPage(data.last_page);
-        setTotal(data.total);
       }
     } catch (err) {
       setError(err.message);
@@ -127,6 +125,7 @@ export default function PostsPage() {
               ))
             )}
           </div>
+          
           {/* Pagination controls */}
           {lastPage > 1 && (
             <div className="mt-8 flex items-center justify-center gap-2">
