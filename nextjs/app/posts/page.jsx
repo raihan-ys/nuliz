@@ -12,17 +12,18 @@ export default function PostsPage() {
   const [lastPage, setLastPage] = useState(1);
   const router = useRouter();
 
+  // Get client's token
+  const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
+
   useEffect(() => {
     async function load(page = 1) {
-      // Get client's token
-      const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
-      
       if (!token) {
         router.replace('/login');
         return;
       }
 
       try {
+        // Fetch posts with pagination
         const res = await fetch(`http://localhost:8000/api/posts?page=${page}`, {
           headers: { Authorization: `Bearer ${token}` },
         });
@@ -32,13 +33,11 @@ export default function PostsPage() {
         const data = await res.json();
         const list = data.data ?? data;
         setPosts(list);
+
         // Set pagination when using Laravel pagination
         if (data.current_page !== undefined) {
           setCurrentPage(data.current_page);
           setLastPage(data.last_page);
-        } else if (data.meta) {
-          setCurrentPage(data.meta.current_page);
-          setLastPage(data.meta.last_page);
         }
       } catch (err) {
         setError(err.message);
@@ -50,11 +49,11 @@ export default function PostsPage() {
     load(currentPage);
   }, [router]);
 
-  async function goToPage(page) {
+  async function movePage(page) {
     if (page < 1 || page > lastPage) return;
+
     setLoading(true);
     setError(null);
-    const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
     if (!token) {
       router.replace('/login');
       return;
@@ -64,7 +63,9 @@ export default function PostsPage() {
       const res = await fetch(`http://localhost:8000/api/posts?page=${page}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
+
       if (!res.ok) throw new Error(String(res.status));
+      
       const data = await res.json();
       const list = data.data ?? data;
       setPosts(list);
@@ -91,7 +92,7 @@ export default function PostsPage() {
         <div className="flex items-center justify-between">
           <h1 className="text-3xl font-bold">Semua Post</h1>
           <Link href="/posts/create" className="btn rounded-full border border-black bg-black text-white hover:bg-white hover:text-black">
-            Buat Post
+            Buat Post Baru
           </Link>
         </div>
 
@@ -105,19 +106,23 @@ export default function PostsPage() {
             ) : (
               posts.map((post, i) => (
                 <article key={post.id} className="rounded border">
+                  {/* Index */}
                   <div className="bg-black text-white p-3">
                     <span className="font-bold"># {i + 1}</span>
                   </div>
                   <div className="flex items-start gap-4 p-6">
                     <div className="flex-1">
+                      {/* Title */}
                       <h2 className="text-xl font-semibold">
                         <Link href={`/posts/${post.id}`} className="hover:underline">
                           {truncate(post.title, 200)}
                         </Link>
                       </h2>
+                      {/* Writer */}
                       <div className="mt-2 text-sm text-black/70">
-                        Oleh {post.writer?.name ?? post.writer ?? "Unknown"} • {post.comments_count ?? 0} komentar - Dibuat pada {new Date(post.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
+                        Oleh {post.writer ?? "Anonymous"} • {post.comments_count ?? 0} komentar - Dibuat pada {new Date(post.created_at).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" })}
                       </div>
+                      {/* Content */}
                       <p className="mt-4 text-black/80" dangerouslySetInnerHTML={{ __html: truncate(post.content, 200) }} />
                     </div>
                   </div>
@@ -129,10 +134,12 @@ export default function PostsPage() {
           {/* Pagination controls */}
           {lastPage > 1 && (
             <div className="mt-8 flex items-center justify-center gap-2">
-              <button className="btn btn-sm" onClick={() => goToPage(currentPage - 1)} disabled={currentPage <= 1}>
+              {/* Previous page */}
+              <button className="btn btn-sm" onClick={() => movePage(currentPage - 1)} disabled={currentPage <= 1}>
                 Prev
               </button>
 
+              {/* Page buttons */}
               {Array.from({ length: lastPage }, (_, i) => i + 1).map((p) => (
                 <button
                   key={p}
@@ -143,7 +150,7 @@ export default function PostsPage() {
                 </button>
               ))}
 
-              <button className="btn btn-sm" onClick={() => goToPage(currentPage + 1)} disabled={currentPage >= lastPage}>
+              <button className="btn btn-sm" onClick={() => movePage(currentPage + 1)} disabled={currentPage >= lastPage}>
                 Next
               </button>
             </div>
