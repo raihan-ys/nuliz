@@ -289,13 +289,11 @@ export default function PostDetailPage() {
       <div className={addComModal ? "modal modal-open" : "modal"}>
         <div className="modal-box bg-white text-black max-w-2xl mx-auto border-t-5 border-black">
           <h3 className="font-bold text-lg">Tambahkan Komentar</h3>
-          <p className="py-2 text-sm text-black/70">Tulis komentar Anda untuk post ini.</p>
 
           {commentError && <div className="text-red-600 mb-2">{commentError}</div>}
           
           <form onSubmit={(e) => handleCommentAdd(e)} className="space-y-4 mt-4">
             <div>
-              <label className="label"><span className="label-text">Komen...</span></label>
               <textarea required value={addComText} onChange={(e) => setAddComText(e.target.value)} className="textarea textarea-bordered w-full bg-white border border-black text-black h-32" />
             </div>
 
