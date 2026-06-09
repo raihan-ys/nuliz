@@ -144,7 +144,7 @@ export default function PostsPage() {
                 <button
                   key={p}
                   className={`btn btn-sm ${p === currentPage ? 'bg-black text-white' : 'btn-ghost'}`}
-                  onClick={() => goToPage(p)}
+                  onClick={() => movePage(p)}
                 >
                   {p}
                 </button>
