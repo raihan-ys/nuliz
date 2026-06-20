@@ -26,6 +26,7 @@ export default function CreatePostPage() {
 	}, [router]);
 
 	// Handle post submission
+	/*
 	async function handleSubmit(e) {
 		e.preventDefault();
 		setLoading(true);
@@ -49,7 +50,7 @@ export default function CreatePostPage() {
 		} finally {
 		setLoading(false);
 		}
-	}
+	} */
 
 	return (
 		<div className="min-h-screen bg-white text-black font-sans flex items-center justify-center">
@@ -59,7 +60,8 @@ export default function CreatePostPage() {
 					<h1 className="mt-4 text-2xl font-bold">Postingan Baru</h1>
 				</header>
 
-				<form onSubmit={handleSubmit} className="space-y-4">
+				{/* Before: onSubmit={handleSubmit} */}
+				<form className="space-y-4">
 				<div>
 					<label className="label"><span className="label-text">Judul</span></label>
 					<input
