@@ -1,11 +1,9 @@
 "use client";
 
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { ClassicEditor, Essentials, Paragraph, Bold, Italic, Link, Fullscreen } from 'ckeditor5';
-import 'ckeditor5/ckeditor5.css';
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
+import CKEditorClient from '../../../../components/CKEditorClient';
 
 export default function EditPostPage() {
   const {id} = useParams();
@@ -110,20 +108,17 @@ export default function EditPostPage() {
 
           <div>
             <label className="label"><span className="label-text">Konten</span></label>
-            <CKEditor
+            <CKEditorClient
               required
-              placeholder="Tulis ceritamu di sini..."
-              initialData={content}
-              editor={ClassicEditor}
-              onChange={(event, editor) => setContent(editor.getData())}
               data={content}
+              onChange={(event, editor) => setContent(editor.getData())}
               config={{
                 licenseKey: 'GPL',
-                plugins: [Essentials, Paragraph, Bold, Italic, Link, Fullscreen],
+                plugins: ['Essentials', 'Paragraph', 'Bold', 'Italic', 'Link', 'Fullscreen'],
                 toolbar: ['undo', 'redo', '|', 'bold', 'italic', '|', 'link', '|', 'fullscreen'],
                 placeholder: 'Tulis ceritamu di sini...'
               }}
-       			/>
+            />
           </div>
 
           <div className="flex items-center justify-between">

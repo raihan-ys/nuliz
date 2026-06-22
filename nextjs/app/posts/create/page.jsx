@@ -1,11 +1,9 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { CKEditor } from '@ckeditor/ckeditor5-react';
-import { ClassicEditor, Essentials, Paragraph, Bold, Italic, Link, Fullscreen } from 'ckeditor5';
-import 'ckeditor5/ckeditor5.css';
 import { useState, useEffect } from "react";
 import Image from "next/image";
+import CKEditorClient from '../../components/CKEditorClient';
 
 export default function CreatePostPage() {
 	const router = useRouter();
@@ -58,7 +56,7 @@ export default function CreatePostPage() {
 					<Image src="/images/writingPoster.png" alt="create post banner" width={120} height={80} />
 					<h1 className="mt-4 text-2xl font-bold">Postingan Baru</h1>
 				</header>
-				
+
 				<form onSubmit={handleSubmit} className="space-y-4">
 				<div>
 					<label className="label"><span className="label-text">Judul</span></label>
@@ -71,21 +69,20 @@ export default function CreatePostPage() {
 					/>
 				</div>
 
+				{/*ERROR: PLUGINS NOT FOUND. IMPORT? */}
 				<div>
 					<label className="label"><span className="label-text">Konten</span></label>
-					<CKEditor
+					<CKEditorClient
 						required
-						placeholder="Tulis ceritamu di sini..."
-						editor={ClassicEditor}
-						onChange={(event, editor) => setContent(editor.getData())}
 						data={content}
+						onChange={(event, editor) => setContent(editor.getData())}
 						config={{
 							licenseKey: 'GPL',
-							plugins: [Essentials, Paragraph, Bold, Italic, Link, Fullscreen],
+							plugins: ['Essentials', 'Paragraph', 'Bold', 'Italic', 'Link', 'Fullscreen'],
 							toolbar: ['undo', 'redo', '|', 'bold', 'italic', '|', 'link', '|', 'fullscreen'],
 							placeholder: 'Tulis ceritamu di sini...'
 						}}
-       				/>
+				   />
 				</div>
 
 				<div className="flex items-center justify-between">
