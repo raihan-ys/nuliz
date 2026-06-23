@@ -108,6 +108,7 @@ export default function EditPostPage() {
 
           <div>
             <label className="label"><span className="label-text">Konten</span></label>
+            {/*ERROR: PLUGINS NOT FOUND. IMPORT? */}
             <CKEditorClient
               required
               data={content}
