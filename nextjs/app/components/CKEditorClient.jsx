@@ -1,4 +1,4 @@
-// CKEditor is called after rendering, because...
+// CKEditor is called after rendering, because
 
 "use client";
 
