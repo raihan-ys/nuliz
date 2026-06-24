@@ -3,7 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useRouter } from "next/navigation";
 import Image from "next/image";
-import CKEditorClient from '../../components/CKEditorClient';
+import CKEditorClient from 'components/CKEditorClient';
 
 export default function EditPostPage() {
   const {id} = useParams();
