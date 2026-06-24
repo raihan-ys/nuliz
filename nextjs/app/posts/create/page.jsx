@@ -3,7 +3,7 @@
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Image from "next/image";
-import CKEditorClient from 'components/CKEditorClient';
+import CKEditorClient from '@/app/components/CKEditorClient';
 
 export default function CreatePostPage() {
 	const router = useRouter();
