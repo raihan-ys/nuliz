@@ -23,7 +23,10 @@ export default function RegisterPage() {
             // Store user's data
             const res = await fetch("https://nuliz.great-site.net/api/register", {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: { 
+                    "Content-Type": "application/json",
+                    "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+                },
                 body: JSON.stringify({
                     name,
                     email,
