@@ -6,6 +6,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 export default function RegisterPage() {
+    const ALLOWED_ORIGIN = process.env.NODE_ENV === 'production' ? 'https://app.example' : '*';
     const [name, setName] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
