@@ -27,6 +27,7 @@ export default function RegisterPage() {
                 headers: { 
                     "Content-Type": "application/json",
                     "Access-Control-Allow-Origin": ALLOWED_ORIGIN,
+                    'Accept': 'application/json'
                 },
                 body: JSON.stringify({
                     name,
